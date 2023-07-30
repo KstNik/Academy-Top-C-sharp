@@ -1,0 +1,146 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Text;
+using System.Threading.Tasks;
+
+public static class Extensions {
+    public static string reverse(this string str) {
+        return new string(str.Reverse().ToArray());
+    }
+}
+
+namespace Basics_programming_C_sharp {
+    internal class Program {
+            static void Swap<T>(ref T lhs, ref T rhs) {
+                T temp;
+                temp = lhs;
+                lhs = rhs;
+                rhs = temp;
+            }
+            static void Main(string[] args) {
+            Console.WriteLine("\n\t\tОСНОВЫ ЯЗЫКА ПРОГРАММИРОВАНИЯ C#");
+            int num, m, n;
+            bool flag;
+           
+            Console.WriteLine("\n\t\tЗадание 1 \"Деление на 3 и 5\"\n");
+            flag = false;
+            Console.Write("  Введите натуральное число от 1 до 100: ");
+            do {
+                if (flag)
+                    Console.Write("  – измените, не соответствует условиям: ");
+                num = Convert.ToInt32(Console.ReadLine());
+                flag = true;
+            } while ((num < 1) || (num > 100));
+            Console.Write("  Результат:");
+            if ((num % 3 == 0) || (num % 5 == 0))
+                Console.WriteLine((num % 3 == 0 ? " Fizz" : "") + ((num % 5 == 0 ? " Buzz" : "")) +".");
+            else
+                Console.WriteLine(" " + num + ".");
+            
+            Console.WriteLine("\n\t\tЗадание 2 \"Вычисление процента\"\n");
+            double number;
+            int percent;
+            Console.WriteLine("  Введите:");
+            Console.Write("  – значение: ");
+            number = Convert.ToDouble(Console.ReadLine());
+            Console.Write("  – процент: ");
+            percent = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("  Результат: " + number/100*percent + ".");
+            
+            Console.WriteLine("\n\t\tЗадание 3 \"Числовой конструктор\"\n");
+            char [] arrChar = new char[4];
+            Console.WriteLine("  Введите 4 цифры:");
+            for (int i = 0; i < 4; i++) {
+                Console.Write("  – " + (i + 1) + (i != 2 ? "-ая" : "-ья") + ": ");
+                arrChar[i] = Convert.ToChar(Console.ReadLine());
+            }
+            num = Convert.ToInt32(string.Concat(arrChar[0], arrChar[1], arrChar[2], arrChar[3]));
+            Console.WriteLine("  Результат: " + num + ".");
+           
+            Console.WriteLine("\n\t\tЗадание 4 \"Перестановка цифр в числе\"\n");
+            flag = false;
+            Console.WriteLine("  Введите:");
+            Console.Write("  – шестизначное натуральное число: ");
+            do{ 
+                if (flag)
+                    Console.Write("  – измените, не соответствует условиям: ");
+                num = Convert.ToInt32(Console.ReadLine());
+                flag = true;
+            } while ((num < 100000) || (num > 999999));
+            char[] arrChars = Convert.ToString(num).ToCharArray();
+            Console.WriteLine("  – порядковые номера цифр, меняемых местами:");
+            Console.Write("    – 1-ой: ");
+            m = Convert.ToInt32(Console.ReadLine());
+            Console.Write("    – 2-ой: ");
+            n = Convert.ToInt32(Console.ReadLine());
+            Swap<char>(ref arrChars[m - 1], ref arrChars[n - 1]);
+            Console.WriteLine("  Результат: " + string.Concat(arrChars[0], arrChars[1], 
+                arrChars[2], arrChars[3], arrChars[4], arrChars[5]) + ".");
+            
+            Console.WriteLine("\n\t\tЗадание 5 \"Сезон и день недели\"\n");
+            DateTime date;
+            Console.Write("  Введите дату [ДД.ММ.ГГГГ]: ");
+            date = Convert.ToDateTime(Console.ReadLine());
+            Console.Write("  Результат: ");
+            switch ((date.Month % 12) / 3) {
+                case 0:
+                    Console.Write("Winter ");
+                    break;
+                case 1:
+                    Console.Write("Spring ");
+                    break;
+                case 2:
+                    Console.Write("Summer ");
+                    break;
+                 default:
+                    Console.Write("Autumn ");
+                    break;
+             }
+            Console.WriteLine(date.DayOfWeek + ".");
+
+            Console.WriteLine("\n\t\tЗадание 6 \"Преобразование температуры\"\n");
+            double t;
+            char deg;
+            Console.WriteLine("  Введите:");
+            Console.Write("  – температуру [°]: ");
+            t = Convert.ToDouble(Console.ReadLine());
+            Console.Write("  – шкалу [С или F]: ");
+            deg = Convert.ToChar(Console.ReadLine());
+            Console.Write("  Результат: ");
+            switch (deg) {
+                case 'C':
+                    Console.WriteLine((t * 9 / 5 + 32) + "°F.");
+                    break;
+                case 'F':
+                    Console.WriteLine(((t - 32) * 5 / 9) + "°C.");
+                    break;
+                default:
+                    Console.WriteLine("исходная температура задана некорректно.");
+                    break;
+            }
+            
+            Console.WriteLine("\n\t\tЗадание 7 \"Чётные числа диапазона\"\n");
+            Console.WriteLine("  Введите 2 натуральных числа – границы диапазона:");
+            Console.Write("  – 1-ое: ");
+            m = Convert.ToInt32(Console.ReadLine());
+            Console.Write("  – 2-ое: ");
+            n = Convert.ToInt32(Console.ReadLine());
+            if (m > n)
+                Swap<int>(ref m, ref n);
+            Console.Write("  Результат: ");
+            if (m % 2 != 0) m++;
+            for (int i = m; i <= n; i += 2)
+                Console.Write(i + (i < n - 1 ? ", " : ".\n"));
+            
+            Console.WriteLine("\n\t\tЗадание 8 \"Проверка на палиндромность\"\n");
+            Console.Write("  Введите слово: ");
+            string str = Console.ReadLine().ToUpper().Replace('Ё', 'Е');
+            Console.WriteLine("  Результат:" + (str == str.reverse() ? " " : " не ") + "палиндромно.");
+            
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
