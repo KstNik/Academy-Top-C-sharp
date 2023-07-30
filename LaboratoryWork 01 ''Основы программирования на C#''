@@ -1,0 +1,118 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public static class Extensions {
+    public static string reverse(this string str) {
+        return new string(str.Reverse().ToArray());
+    }
+}
+
+namespace Fundamentals_C_sharp {
+    internal class Program {
+        static void Swap<T>(ref T lhs, ref T rhs) {
+            T temp;
+            temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        }
+        static void Main(string[] args) {
+            Console.WriteLine("\n\t\tОСНОВЫ ЯЗЫКА ПРОГРАММИРОВАНИЯ C#");
+            int[] arrMinMax = new int[] { -1, -1};
+            
+            Console.WriteLine("\n\t\tЗадание 1 \"Цитата\"\n");
+            Console.WriteLine("  It's easy to win forgiveness for being wrong;");
+            Console.WriteLine("  being right is what gets you into real trouble.");
+            Console.WriteLine("  Bjarne Stroustrup");
+           
+            Console.WriteLine("\n\t\tЗадание 2 \"Сумма, произведение чисел, \n\t\tмаксимальное и минимальное значения\"\n");
+            double[] arrNum = new double[5];
+            double[] arrNumОp = new double[4];
+            Console.WriteLine("  Введите 5 чисел:");
+            for (int i = 0; i < 5; i++) {
+                Console.Write("  – " + (i + 1) + (i != 2 ? "-ое" : "-ье") + ": ");
+                arrNum[i] = Convert.ToDouble(Console.ReadLine());
+            }
+           for (int i = 0; i < 4; i++)
+                arrNumОp[i] = arrNum[0];
+            for (int i = 1; i < 5; i++) {
+                arrNumОp[0] += arrNum[i];
+                arrNumОp[1] *= arrNum[i];
+                if (arrNumОp[2] > arrNum[i]) arrNumОp[2] = arrNum[i];
+                if (arrNumОp[3] < arrNum[i]) arrNumОp[3] = arrNum[i];
+            }
+            Console.WriteLine("  Результат:");
+            Console.WriteLine("  – сумма: " + arrNumОp[0] + ";");
+            Console.WriteLine("  – произведение: " + arrNumОp[1] + ";");
+            Console.WriteLine("  – min: " + arrNumОp[2] + ";");
+            Console.WriteLine("  – max: " + arrNumОp[3] + ".");
+           
+            Console.WriteLine("\n\t\tЗадание 3 \"Инверсия\"\n");
+            Console.Write("  Введите натуральное число: ");
+            Console.WriteLine("  Результат: " + Console.ReadLine().reverse());
+           
+            Console.WriteLine("\n\t\tЗадание 4 \"Числа Фибоначчи\"\n");
+            int x = 0, y = 1, z = 1;
+            Console.WriteLine("  Введите 2 натуральных числа – границы диапазона:");
+            for (int i = 0; i < 2; i++) {
+                Console.Write("  – " + (i + 1) + "-ое: ");
+                arrMinMax[i] = Convert.ToInt32(Console.ReadLine());
+            }
+            if (arrMinMax[0] > arrMinMax[1])
+                Swap<int>(ref arrMinMax[0], ref arrMinMax[1]);
+            Console.Write("  Результат:");
+            if (arrMinMax[0] == 0) Console.Write(" " + arrMinMax[0]);
+            do {
+                if ((z >= arrMinMax[0]) && (z <= arrMinMax[1])) Console.Write(" " + z);
+                z = x + y;
+                x = y;
+                y = z;
+            } while (z <= arrMinMax[1]);
+            Console.WriteLine(".");
+           
+            Console.WriteLine("\n\t\tЗадание 5 \"Числовые ряды\"\n");
+            Console.WriteLine("  Введите 2 натуральных числа – границы диапазона:");
+            for (int i = 0; i < 2; i++) {
+                Console.Write("  – " + (i + 1) + "-ое: ");
+                arrMinMax[i] = Convert.ToInt32(Console.ReadLine());
+            }
+            if (arrMinMax[0] > arrMinMax[1])
+                Swap<int>(ref arrMinMax[0], ref arrMinMax[1]);
+            Console.WriteLine("  Результат:");
+            for (int i = arrMinMax[0]; i <= arrMinMax[1]; i++) {
+                Console.Write("  ");
+                for (int j = 0; j < i; j++)
+                    Console.Write(i + " ");
+                Console.WriteLine();
+            }
+            
+            Console.WriteLine("\n\t\tЗадание 6 \"Линия\"\n");
+            int l, direct;
+            char symb;
+            Console.WriteLine("  Введите:");
+            Console.Write("  – длину линии – натуральное число: ");
+            l = Convert.ToInt32(Console.ReadLine());
+            Console.Write("  – символ заполнитель: ");
+            symb = Convert.ToChar(Console.ReadLine());
+            Console.Write("  – вертикальная линия – цифра \"1\", горизонтальная – любая другая: ");
+            direct = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("  Результат:");
+            if (direct != 1)
+                Console.Write("    ");
+            for (int i = 0; i < l; i++) {
+                if (direct != 1)
+                    Console.Write(symb);
+                else {
+                    Console.Write("    ");
+                    Console.WriteLine(symb);
+                }
+            }
+            
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
