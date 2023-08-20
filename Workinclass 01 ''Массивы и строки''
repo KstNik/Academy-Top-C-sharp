@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+public static class Extensions {
+    public static string reverse(this string str) {
+        return new string(str.Reverse().ToArray());
+    }
+}
+
+namespace Array__string {
+    internal class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tМАССИВЫ И СТРОКИ");
+            Random rand = new Random();
+            int k, m, n;
+            long prod = 1;
+            string str;
+
+            Console.WriteLine("\n\tЗадание 1 \"Одномерные массивы\"\n");
+            Console.WriteLine("  Введите 2 натуральных числа – размеры:");
+            Console.Write("  – массива \"A\": ");
+            m = Convert.ToInt32(Console.ReadLine());
+            Console.Write("  – массива \"B\": ");
+            n = Convert.ToInt32(Console.ReadLine());
+            int[] A = new int[m];
+            int[] B = new int[n];
+            Console.WriteLine("  Заполнение случайными значениями:");
+            Console.Write("  – массива \"A\": ");
+            for (int i = 0; i < A.Length; i++) 
+                Console.Write((A[i] = rand.Next(1, 10)) + (i < A.Length - 1 ? " " : "\n"));
+            Console.Write("  – массива \"B\": ");
+            for (int i = 0; i < B.Length; i++)
+                Console.Write((B[i] = rand.Next(1, 10)) + (i < B.Length - 1 ? " " : "\n"));
+            for (int i = 0; i < B.Length; i++)
+                 prod *= B[i];
+            Console.WriteLine("  Характеристика элементов массива \"B\":");
+            Console.WriteLine("  – минимальный: " + B.Min());
+            Console.WriteLine("  – максимальный: " + B.Max());
+            Console.WriteLine("  – сумма: " + B.Sum());
+            Console.WriteLine("  – произведение: " + prod);
+            k = -1;
+            int[] C = new int[m];
+            bool[] D = new bool[n];
+            for (int i = 0; i < A.Length; i++) {
+                for (int j = 0; j < B.Length; j++) {
+                    if ((A[i] == B[j]) && (D[j] == false)) {
+                        ++k;
+                        C[k] = A[i];
+                        D[j] = true;
+                        break;
+                    }
+                }
+            }
+            Array.Resize(ref C, ++k);
+            Console.Write("  Общие элементы массивов: ");
+            if (k > 0) {
+                foreach (int i in C)
+                    Console.Write(i + " ");
+            }
+            else
+                Console.Write ("нет");
+            Console.WriteLine();
+
+            Console.WriteLine("\n\tЗадание 2 \"Массив общих элементов, собранных без повторений\"\n");
+            var result = A.Intersect(B);
+            k = -1;
+            int[] F = new int[m];
+            foreach (int s in result) {
+                k++;
+                F[k] = s;
+            }
+            Array.Resize(ref F, ++k);
+            Console.Write("  Результат (из массивов \"A\" и \"B\"): ");
+            if (k > 0) {
+                foreach (int i in F)
+                    Console.Write(i + " ");
+            }
+            else
+                Console.Write("нет");
+            Console.WriteLine();
+
+            Console.WriteLine("\n\tЗадание 3 \"Проверка строки на палиндромность\"\n");
+            Console.Write("  Введите строку: ");
+            str = Console.ReadLine().ToUpper().Replace('Ё', 'Е');
+            str = str.Replace(" ", "");
+            Console.WriteLine("  Результат:" + (str == str.reverse() ? " " : " не ") + "палиндромна");
+
+            Console.WriteLine("\n\tЗадание 4 \"Подсчёт количества слов в предложении\"\n");
+            Console.Write("  Введите предложение: ");
+            str = Console.ReadLine().Trim();
+            int count = str.Split(' ').Length;
+            Console.WriteLine("  Количество слов: " + count);
+            
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
