@@ -20,6 +20,7 @@ namespace Basics_programming_C_sharp {
                 rhs = temp;
             }
             static void Main(string[] args) {
+            
             Console.WriteLine("\n\t\tОСНОВЫ ЯЗЫКА ПРОГРАММИРОВАНИЯ C#");
             int num, m, n;
             bool flag;
