@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Arrays {
+    internal class Program {
+        static void Swap<T>(ref T lhs, ref T rhs) {
+            T temp;
+            temp = lhs;
+            lhs = rhs;
+            rhs = temp;
+        } 
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\t\t\tМАССИВЫ");
+            int count;
+            Random rand = new Random();
+            int size = rand.Next(15, 20);
+            int[] arr = new int[size];
+            
+            Console.WriteLine("\n\tЗадание 1 \"Преобразование массива – удаление \"0\"," +
+                "\n\t\t\tдобавление справа \"-1\"\n");
+            count = 0;
+            Console.Write("  Генерация: ");
+            for (int i = 0; i < arr.Length; i++)
+                 Console.Write(" " + (arr[i] = rand.Next(0, 4)) + (i < arr.Length - 1 ? " " : "\n"));
+            for (int i = 0; i < arr.Length; i++) {
+                if (arr[i] == 0)
+                    count++;
+                else
+                    arr[i - count] = arr[i];
+            }
+            Console.Write("  Изменение: ");
+            for (int i = 0; i < arr.Length; i++)
+                 Console.Write((i < arr.Length - count ? " " : "") + (i < arr.Length - count ? arr[i] : arr[i] = -1) 
+                     + (i < arr.Length - 1 ? " " : "\n"));
+
+            Console.WriteLine("\n\tЗадание 2 \"Преобразование массива – размещение в начале" +
+                "\n\t\t\tотрицательных элементов\"\n");
+            size = rand.Next(10, 20);
+            Console.Write("  Генерация: ");
+            for (int i = 0; i < arr.Length; i++) {
+                arr[i] = rand.Next(-9, 10);
+                Console.Write((arr[i] >= 0 ? " " : "") + arr[i] + (i < arr.Length - 1 ? " " : "\n"));
+            }
+            for (int i = 0; i < arr.Length; i++) {
+                for (int j = arr.Length - 1; j > i; j--) {
+                    if ((!(arr[j - 1] < 0)) && (arr[j] < 0))
+                        Swap(ref arr[j - 1], ref arr[j]);
+                }
+            }
+            Console.Write("  Изменение: ");
+            for (int i = 0; i < arr.Length; i++)
+                Console.Write((arr[i] >= 0 ? " " : "") + arr[i] + (i < arr.Length - 1 ? " " : "\n"));
+
+            Console.WriteLine("\n\tЗадание 3 \"Подсчёт количества вхождений числа в массив\"\n");
+            int num;
+            count = 0;
+            Console.Write("  Исходный массив: ");
+            for (int i = 0; i < arr.Length; i++)
+                Console.Write((arr[i] = rand.Next(0, 10)) + (i < arr.Length - 1 ? " " : "\n"));
+            Console.Write("  Введите число: ");
+            num = Convert.ToInt32(Console.ReadLine());
+            foreach (int i in arr)
+                if (i == num)
+                    count++;
+            Console.WriteLine("  Количество вхождений: " + count);
+
+            Console.WriteLine("\n\tЗадание 4 \"Редактирование массива – изменение порядка " +
+                "\n\t\t\tследования столбцов\"\n");
+            int m, n;
+            int sizeVert = rand.Next(3, 7), sizeHoriz = sizeVert + rand.Next(2, 5);
+            Console.WriteLine("  Исходный массив:");
+            int[,] arr2D = new int[sizeVert, sizeHoriz];
+            for (int i = 0; i < arr2D.GetLength(0); i++) {
+                Console.Write("    ");
+                for (int j = 0; j < arr2D.GetLength(1); j++)
+                    Console.Write((arr2D[i, j] = rand.Next(0, 10)) + " ");
+                Console.WriteLine();
+            }
+            Console.WriteLine("  Введите номера столбцов, которые необходимо поменять местами:");
+            Console.Write("  – 1-го: ");
+            m = Convert.ToInt32(Console.ReadLine()) - 1;
+            Console.Write("  – 2-го: ");
+            n = Convert.ToInt32(Console.ReadLine()) - 1;
+            if (m > n)
+                Swap<int>(ref m, ref n);
+            if (m < 0) m = 0;
+            if (n > sizeHoriz - 1) n = sizeHoriz - 1;
+            if (m != n)
+                for (int i = 0; i < arr2D.GetLength(0); i++)
+                    Swap<int>(ref arr2D[i, m], ref arr2D[i, n]);
+            Console.WriteLine("  Преобразованный массив:");
+            for (int i = 0; i < arr2D.GetLength(0); i++) {
+                Console.Write("    ");
+                for (int j = 0; j < arr2D.GetLength(1); j++)
+                    Console.Write(arr2D[i, j] + " ");
+                Console.WriteLine();
+            }
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
