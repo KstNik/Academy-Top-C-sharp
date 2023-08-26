@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp1{
+    class Complex {
+        public double Re { get; set; }
+        public double Im { get; set; }
+        public Complex(double re, double im) { Re = re; Im = im; }
+        public static Complex operator +(Complex a, Complex b) {
+            return new Complex(a.Re + b.Re, a.Im + b.Im);
+        }
+        public static Complex operator -(Complex a, Complex b) {
+            return new Complex(a.Re - b.Re, a.Im - b.Im);
+        }
+        public static Complex operator *(Complex a, Complex b) {
+            return new Complex(a.Re * b.Re - a.Im * b.Im, a.Re * b.Im + a.Im * b.Re);
+        }
+        public static Complex operator /(Complex a, Complex b) {
+            return new Complex((a.Re * b.Re + a.Im * b.Im) / (b.Re * b.Re + b.Im * b.Im), 
+                (a.Im * b.Re - a.Re * b.Im) / (b.Re * b.Re + b.Im * b.Im));
+        }
+        public static void ComplexVisual(Complex a) { Console.Write(a.Re + (a.Im >= 0 ? "+" : "") + a.Im +"i");}
+    }
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\t\tКЛАССЫ");
+
+            Console.WriteLine("\n\tЗадание \"Комплексное число\"\n");
+            Complex a = new Complex(1, 2);
+            Complex b = new Complex(3, 4);
+            Console.Write("  Исходные числа: ");
+            Complex.ComplexVisual(a);
+            Console.Write(" и ");
+            Complex.ComplexVisual(b);
+            Console.WriteLine('.');
+            Console.WriteLine("  Перегрузка операторов, результаты:");
+            Console.Write("  – сложения  (оператор \"+\"): ");
+            Complex.ComplexVisual(a + b);
+            Console.WriteLine(';');
+            Console.Write("  – вычитания (оператор \"-\"): ");
+            Complex.ComplexVisual(a - b);
+            Console.WriteLine(';');
+            Console.Write("  – умножения (оператор \"*\"): ");
+            Complex.ComplexVisual(a * b);
+            Console.WriteLine(';');
+            Console.Write("  – деления   (оператор \"/\"): ");
+            Complex.ComplexVisual(a / b);
+            Console.WriteLine('.');
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
