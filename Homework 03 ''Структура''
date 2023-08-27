@@ -1,0 +1,266 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static Structure.Program;
+
+namespace Structure {
+    enum Subjects {
+        программирование,
+        администрирование,
+        дизайн
+    }
+    class Student {
+        private string lastName_;
+        private string firstName_;
+        private string middleName_;
+        private string group_;
+        private int age_;
+        private int[][] mark_;
+        private int countP_;
+        private int countA_;
+        private int countD_;
+        public Student(string lName, string fName, string mName, string group, int age) {
+            lastName_ = lName;
+            firstName_ = fName;
+            middleName_ = mName;
+            group_ = group;
+            age_ = age;
+            mark_ = new int[3][] { 
+                new int[5],
+                new int[3],
+                new int[4]
+            };
+            countP_ = 0;
+            countA_ = 0;
+            countD_ = 0;
+        }
+        public void AddMark(Subjects subject, int mark) {
+            switch (subject) {
+                case Subjects.программирование:
+                    mark_[(int)subject].SetValue(mark, countP_);
+                    countP_++;
+                    Console.WriteLine($"  – {Subjects.программирование}" +
+                        $": {mark}");
+                    break;
+                case Subjects.администрирование:
+                    mark_[(int)subject].SetValue(mark, countA_);
+                    countA_++;
+                    Console.WriteLine($"  – {Subjects.администрирование}" +
+                        $": {mark}");
+                    break;
+                case Subjects.дизайн:
+                    mark_[(int)subject].SetValue(mark, countD_);
+                    countD_++;
+                    Console.WriteLine($"  – {Subjects.дизайн}" +
+                        $": {mark}");
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void AverMark(Subjects subject) {
+            double result = 0;
+            switch (subject) {
+                case Subjects.программирование:
+                    for (int i = 0; i < countP_; i++)
+                        result += mark_[(int)subject][i];
+                    result /= countP_;
+                    break;
+                case Subjects.администрирование:
+                    for (int i = 0; i < countA_; i++)
+                        result += mark_[(int)subject][i];
+                    result /= countA_;
+                    break;
+                case Subjects.дизайн:
+                    for (int i = 0; i < countD_; i++)
+                         result += mark_[(int)subject][i];
+                     result /= countD_;
+                    break;
+                default:
+                    break;
+            }
+            Console.WriteLine($"  – {subject}: {result}");
+        }
+        public void GetStudentMarks() {
+            Console.WriteLine("  Оценки:");
+            for (int i = 0; i < mark_.Length; i++) {
+                Console.Write("  – " + (Subjects)i + ": ");
+                foreach (var item in mark_[i])
+                     Console.Write(item + " ");
+                Console.WriteLine();
+            }
+        }
+        public void PrintStudentInfo() {
+            Console.WriteLine($"  Студент (данные):");
+            Console.WriteLine($"  – фамилия: {lastName_}");
+            Console.WriteLine($"  – имя: {firstName_}");
+            Console.WriteLine($"  – отчество: {middleName_}");
+            Console.WriteLine($"  – группа: {group_}");
+            Console.WriteLine($"  – возраст: {age_}");
+        }
+    }
+    internal class Program {
+        public enum ArticleType {
+            потребительский,
+            промышленный
+        }
+        public enum ClientType {
+            обычный,
+            ВИП
+        }
+        public enum PayType {
+            наличными,
+            картой,
+            криптовалютой
+        }
+        public struct Article {
+            private int ProductID;
+            private string ProductName;
+            private double ProductPrice;
+            private ArticleType ProductType;
+            public Article(int productID, string productName, double productPrice, ArticleType productType) {
+                ProductID = productID;
+                ProductName = productName;
+                ProductPrice = productPrice;
+                ProductType = productType;
+            }
+            public void Print() {
+                Console.WriteLine($"  Товар (характеристика):");
+                Console.WriteLine($"  – код: {ProductID}");
+                Console.WriteLine($"  – название: {ProductName}");
+                Console.WriteLine($"  – цена: {ProductPrice} $");
+                Console.WriteLine($"  – тип: {ProductType}");
+            }
+        }
+        public struct Client {
+            private int IdClient;
+            private string NameClient;
+            private string AdressClient;
+            private string PhoneClient;
+            private int OrdersClient;
+            private double AmountClient;
+            private ClientType TypeClient;
+            public Client(int idClient, string nameClient, string adressClient, string phoneClient, int ordersClient,
+                double amountClient, ClientType typeClient) {
+                IdClient = idClient;
+                NameClient = nameClient;
+                AdressClient = adressClient;
+                PhoneClient = phoneClient;
+                OrdersClient = ordersClient;
+                AmountClient = amountClient;
+                TypeClient = typeClient;
+            }
+            public void Print() {
+                Console.WriteLine($"  Клиент (данные):");
+                Console.WriteLine($"  – личный номер: {IdClient}");
+                Console.WriteLine($"  – имя, фамилия: {NameClient}");
+                Console.WriteLine($"  – адрес: {AdressClient}");
+                Console.WriteLine($"  – телефон: {PhoneClient}");
+                Console.WriteLine($"  – заказы:");
+                Console.WriteLine($"    – количество: {OrdersClient}");
+                Console.WriteLine($"    – сумма: {AmountClient} $");
+                Console.WriteLine($"  – статус: {TypeClient}");
+            }
+
+        }
+        public struct RequestItem {
+            public string Product;
+            private int Quantity;
+            public RequestItem(string product, int quantity) {
+                Product = product;
+                Quantity = quantity;
+            }
+            public void Print() { Console.WriteLine($"  – {Product}: {Quantity} ед."); }
+        }
+        public struct Request {
+            private int OrderId;
+            private string OrderClient;
+            private DateTime OrderDate;
+            private string[] OrderList;
+            private int[] OrderCost;
+            private int TotalAllOrders;
+            private PayType OrderPay;
+            public Request(int orderId, string orderClient, DateTime orderDate, string[] orderList, int[] orderCost,
+                PayType orderPay) {
+                OrderId = orderId;
+                OrderClient = orderClient;
+                OrderDate = orderDate;
+                OrderList = orderList;
+                OrderCost = orderCost;
+                OrderPay = orderPay;
+                TotalAllOrders = orderCost.Sum();
+            }
+            public void Print() {
+                Console.WriteLine($"  Заказ (характеристика):");
+                Console.WriteLine($"  – код: {OrderId}");
+                Console.WriteLine($"  – клиент: {OrderClient}");
+                Console.WriteLine($"  – дата: {OrderDate.ToString("D")}");
+                Console.WriteLine($"  – оплата: {OrderPay}");
+                Console.WriteLine($"  – заказанные товары:");
+                for (int i = 0; i < OrderList.Length; i++)
+                    Console.WriteLine($"    – {OrderList[i]} – {OrderCost[i]} руб.");
+                Console.WriteLine($"  – общая сумма: {TotalAllOrders} руб.");
+            }
+        }
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tСТРУКТУРА");
+            
+            Console.WriteLine("\n\tЗадания 1, 5 \"Товар (Article)\"\n");
+            Article Art = new Article(103, "шаттл \"Дискавери\"", 2951178452.58, ArticleType.промышленный);
+            Art.Print();
+            Console.Write("  Для продолжения нажмите любую клавишу ");
+            Console.ReadKey();
+
+            Console.WriteLine("\n\n\tЗадания 2, 6 \"Клиент (Client)\"\n");
+            Client Cl = new Client(2, "Нил Армстронг", "Нью-Йорк, Бродвей, 12-100", "+1 209-934-7485", 1, 2951178452.58, ClientType.ВИП);
+            Cl.Print();
+            Console.Write("  Для продолжения нажмите любую клавишу ");
+            Console.ReadKey();
+
+            Console.WriteLine("\n\n\tЗадания 3, 4, 7 \"Заказ (Request)\"\n");
+            int count = 2;
+            RequestItem[] arrReqIt = new RequestItem[count];
+            arrReqIt[0] = new RequestItem ("карандаши", 10);
+            arrReqIt[1] = new RequestItem ("ручки", 5);
+            Console.WriteLine("  Товар:");
+            for (int i = 0; i < arrReqIt.Length; i++)
+                arrReqIt[i].Print();
+            string[] items = { arrReqIt[0].Product, arrReqIt[1].Product };
+            int[] money = { 100, 150};
+            DateTime dT = new DateTime(2022, 12, 31);
+            Request Req = new Request(115, "Иммануил Кант", dT, items, money, PayType.наличными);
+            Req.Print();
+            Console.Write("  Для продолжения нажмите любую клавишу ");
+            Console.ReadKey();
+
+            Console.WriteLine("\n\n\tЗадание 8 \"Студент (Student)\"\n");
+            Student St = new Student("Сидоров", "Иван", "Петрович", "РПО 321", 25);
+            St.PrintStudentInfo();
+            St.GetStudentMarks();
+            Console.WriteLine("  Выставление оценок:");
+            St.AddMark(Subjects.программирование, 5);
+            St.AddMark(Subjects.программирование, 4);
+            St.AddMark(Subjects.программирование, 5);
+            St.AddMark(Subjects.программирование, 5);
+            St.AddMark(Subjects.программирование, 4);
+            St.AddMark(Subjects.администрирование, 5);
+            St.AddMark(Subjects.администрирование, 3);
+            St.AddMark(Subjects.администрирование, 4);
+            St.AddMark(Subjects.дизайн, 4);
+            St.AddMark(Subjects.дизайн, 4);
+            St.AddMark(Subjects.дизайн, 5);
+            St.AddMark(Subjects.дизайн, 4);
+            St.GetStudentMarks();
+            Console.WriteLine("  Средний балл:");
+            St.AverMark(Subjects.программирование);
+            St.AverMark(Subjects.администрирование);
+            St.AverMark(Subjects.дизайн);
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
