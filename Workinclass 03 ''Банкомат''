@@ -1,0 +1,162 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Bankomat.Accountspace;
+using Bankomat.Bancspace;
+using Bankomat.Clientspace;
+
+namespace Bankomat {
+    namespace Accountspace {
+        class Account {
+            public uint accountNumber { get; set; } = 0;
+            public uint pass { get; set; } = 0;
+            public uint amount { get; set; } = 0;
+            public Account(uint accountNumber, uint pass) {
+                this.accountNumber = accountNumber;
+                this.pass = pass;
+            }
+        }
+    }
+    namespace Bancspace {
+        class Banc {
+            public Bankomat.Clientspace.Client objClient;
+            public string Print() {
+                return
+                    $"  Клиент:  {objClient.firstName} {objClient.lastName}" +
+                    $"\n  Номер счёта: {objClient.objAccount.accountNumber}" +
+                    $"\n  Сумма на счёте: {objClient.objAccount.amount}";
+            }
+            public void refillAmount(ref Banc obj, uint amountTemp) {
+                obj.objClient.objAccount.amount += amountTemp;
+                Console.Write("  Счёт пополнен");
+                Console.ReadKey();
+            }
+            public void takeAmount(ref Banc obj, uint amountTemp) {
+                if (!(obj.objClient.objAccount.amount < amountTemp)) {
+                    obj.objClient.objAccount.amount -= amountTemp;
+                    Console.Write("  Сумма со счёта снята");
+                    Console.ReadKey(); }
+                else {
+                    Console.Write("  На счёте недостаточно средств");
+                    Console.ReadKey();
+                }
+            }
+        }
+    }
+    namespace Clientspace {
+        class Client {
+            public Bankomat.Accountspace.Account objAccount;
+            public string firstName { get; set; } = "default";
+            public string lastName { get; set; } = "default";
+            public Client(string firstName, string lastName) {
+                this.firstName = firstName;
+                this.lastName = lastName;
+            }
+        }
+    }
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\tПРОСТРАНСТВО ИМЁН");
+
+            Console.WriteLine("\n\tЗадание \"Банкомат\"\n");
+            uint temp = 3;
+            char key;
+            uint _passKey;
+            bool go_on = true;
+            uint _pass = (uint) new Random().Next(100, 999);
+            uint _accountNumber = (uint) new Random().Next(100000000, 999999999);
+            Console.Write("  Введите данные для создания счёта\n  Имя: ");
+            try {
+                string _firstName = Console.ReadLine();
+                Console.Write("  Фамилию: ");
+                string _lastName = Console.ReadLine();
+                Console.Clear();
+                if (!(_lastName.Length == 0 || _firstName.Length == 0)) {
+                    Console.Write($"\n  Ваш ПИН-код: {_pass} \n  Номер Вашего лицевого счёта: {_accountNumber}" +
+                                      $"\n  Для продолжения нажмите любую клавишу ");
+                    Console.ReadKey();
+                    var clientBanc = new Bankomat.Bancspace.Banc();
+                    clientBanc.objClient = new Client(_firstName, _lastName);
+                    clientBanc.objClient.objAccount = new Account(_accountNumber, _pass);
+                    while (go_on) {
+                        Console.Clear();
+                        Console.Write("\n  Введите ПИН-код: ");
+                        _passKey = Convert.ToUInt32(Console.ReadLine());
+                        if (_passKey == _pass) {
+                            while (go_on) {
+                                Console.Clear();
+                                Console.WriteLine("\n\tВыберите пункт меню");
+                                Console.WriteLine("  *******************************");
+                                Console.WriteLine("  1 - Вывод баланса на экран");
+                                Console.WriteLine("  2 - Пополнить счёт");
+                                Console.WriteLine("  3 - Снять деньги со счёта");
+                                Console.WriteLine("  4 - Выход");
+                                Console.WriteLine("  *******************************");
+                                Console.Write("  ");
+                                switch (Console.ReadKey().KeyChar) {
+                                    case '1':
+                                        Console.Clear();
+                                        Console.WriteLine();
+                                        Console.WriteLine(clientBanc.Print());
+                                        Console.Write("\n  Для продолжения нажмите любую клавишу, для выхода нажмите 0 ");
+                                        key = Console.ReadKey().KeyChar;
+                                        if (key == '0')
+                                            go_on = false;
+                                        break;
+                                    case '2':
+                                        Console.Clear();
+                                        Console.Write("\n  Введите сумму которую хотите внести на счёт: ");
+                                        temp = Convert.ToUInt32(Console.ReadLine());
+                                        clientBanc.refillAmount(ref clientBanc, temp);
+                                        Console.Write("\n  Для продолжения нажмите любую клавишу, для выхода нажмите 0 ");
+                                        key = Console.ReadKey().KeyChar;
+                                        if (key == '0')
+                                            go_on = false;
+                                        break;
+                                    case '3':
+                                        Console.Clear();
+                                        Console.Write("\n  Введите сумму которую хотите снять со счёта: ");
+                                        temp = Convert.ToUInt32(Console.ReadLine());
+                                        clientBanc.takeAmount(ref clientBanc, temp);
+                                        break;
+                                    case '4':
+                                        go_on = false;
+                                        break;
+                                    default:
+                                        Console.Clear();
+                                        Console.Write("\n  Неверный выбор ");
+                                        Console.ReadKey();
+                                        break;
+                                }
+                            }
+                        }
+                        else {
+                            temp--;
+                            if (temp == 0) {
+                                Console.Write("  Карта заблокирована!");
+                                Thread.Sleep(3000);
+                                go_on = false;
+                            }
+                            else {
+                                Console.Clear();
+                                Console.Write("\n  Введённый ПИН-код не верный \n  Для продолжения нажмите любую клавишу ");
+                                Console.ReadKey();
+                            }
+                        }
+                    }
+                }
+                else
+                    Console.Write("\n  Некорректно введены данные ");
+                Console.Clear();
+                Console.Write("\n  Завершение программы, для выхода нажмите любую клавишу ");
+            }
+            catch (Exception) {
+                Console.WriteLine("  Завершение программы, для выхода нажмите любую клавишу ");
+            }
+            Console.ReadKey();
+        }
+    }
+}
