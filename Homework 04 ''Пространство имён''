@@ -1,0 +1,176 @@
+// Проект / Добавить класс / Класс / назвать Wonder1.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder1 {
+        public static void Show() {
+            Console.WriteLine("  1. Великие пирамиды Гизы, Египет.");
+        }
+    }
+}
+
+// Проект / Добавить класс / Класс / назвать Wonder2.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder2 {
+        public static void Show() {
+            Console.WriteLine("  2. Висячие сады Семирамиды, Вавилон.");
+        }
+    }
+}
+
+// Проект / Добавить класс / Класс / назвать Wonder3.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder3 {
+        public static void Show() {
+            Console.WriteLine("  3. Статуя Зевса в Олимпии, Греция.");
+        }
+    }
+}
+
+// Проект / Добавить класс / Класс / назвать Wonder4.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder4 {
+        public static void Show() {
+            Console.WriteLine("  4. Храм Артемиды в Эфесе, Турция.");
+        }
+    }
+}
+
+// Проект / Добавить класс / Класс / назвать Wonder5.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder5 {
+        public static void Show() {
+            Console.WriteLine("  5. Мавзолей в Галикарнасе, Турция.");
+        }
+    }
+}
+
+// Проект / Добавить класс / Класс / назвать Wonder6.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder6 {
+        public static void Show() {
+            Console.WriteLine("  6. Колосс Родосский, Греция.");
+        }
+    }
+}
+
+// Проект / Добавить класс / Класс / назвать Wonder7.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Namespace {
+    internal class Wonder7 {
+        public static void Show() {
+            Console.WriteLine("  7. Александрийский маяк, Египет.");
+        }
+    }
+}
+
+// Program.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace China {
+    class Beijing {
+        private static string populationPrint;
+        public static int population = 21705;
+        public static string Population() => populationPrint = $"Пекин {population} тыс. чел.";
+    }
+}
+
+namespace Russia {
+    class Moscow {
+        private static string populationPrint;
+        public static int population = 13104;
+        public static string Population() => populationPrint = $"Москва {population} тыс. чел.";
+    }
+}
+
+namespace USA {
+    class Washington {
+        private static string populationPrint;
+        public static int population = 602;
+        public static string Population() => populationPrint = $"Вашингтон {population} тыс. чел.";
+    }
+}
+
+namespace Namespace {
+    internal class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tПРОСТРАНСТВО ИМЁН");
+
+            Console.WriteLine("\n\tЗадание 1 \"Чудеса света\"\n");
+            Wonder1.Show();
+            Wonder2.Show();
+            Wonder3.Show();
+            Wonder4.Show();
+            Wonder5.Show();
+            Wonder6.Show();
+            Wonder7.Show();
+
+            Console.WriteLine("\n\tЗадание 2 \"Столицы КНР, РФ и США\"\n");
+            int[] Cyties = { Russia.Moscow.population, USA.Washington.population, China.Beijing.population };
+            Console.WriteLine("  Численность населения:");
+            Console.Write("  – наименьшая: ");
+            if (Cyties.Min() == China.Beijing.population) Console.WriteLine(China.Beijing.Population());
+            if (Cyties.Min() == Russia.Moscow.population) Console.WriteLine(Russia.Moscow.Population());
+            if (Cyties.Min() == USA.Washington.population) Console.WriteLine(USA.Washington.Population());
+            Console.Write("  – наибольшая: ");
+            if (Cyties.Max() == China.Beijing.population) Console.WriteLine(China.Beijing.Population());
+            if (Cyties.Max() == Russia.Moscow.population) Console.WriteLine(Russia.Moscow.Population());
+            if (Cyties.Max() == USA.Washington.population) Console.WriteLine(USA.Washington.Population());
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
