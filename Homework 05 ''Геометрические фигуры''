@@ -1,0 +1,151 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Geometric_figure {
+    abstract class GeometricFigure {
+        public double intervalA;
+        public double intervalB;
+        public const double Pi = 3.14;
+        public GeometricFigure(double intervalA, double intervalB) { this.intervalA = intervalA; this.intervalB = intervalB; }
+        public abstract double Perimeter();
+        public abstract double Area();
+        public abstract void Print();
+    }
+    class Triangle : GeometricFigure {
+        double intervalC;
+        public Triangle(double intervalA, double intervalB, double intervalC) : base(intervalA, intervalB) { this.intervalC = intervalC; }
+        public override double Perimeter() { return intervalA + intervalB + intervalC; }
+        public override double Area() {
+            return Math.Sqrt(Perimeter()/2 * (Perimeter() / 2 - intervalA) * (Perimeter() / 2 - intervalB) * 
+                (Perimeter() / 2 - intervalC));
+        }
+        public override void Print() {
+            Console.WriteLine($"  – треугольник: длины сторон – {intervalA}, {intervalB} и {intervalC}; периметр – {Perimeter()}; " +
+                $"площадь – {Area()};");
+        }
+    }
+    class Square : GeometricFigure {
+        public Square(double intervalA, double intervalB = 0) : base(intervalA, intervalB) { }
+        public override double Perimeter() { return intervalA * 4; }
+        public override double Area() { return Math.Pow(intervalA, 2); }
+        public override void Print() {
+            Console.WriteLine($"  – квадрат: длина стороны – {intervalA}; периметр – {Perimeter()}; " +
+                $"площадь – {Area()};");
+        }
+    }
+    class Rhombus : GeometricFigure {
+        public Rhombus(double intervalA, double intervalB) : base(intervalA, intervalB) { }
+        public override double Perimeter() { return Math.Sqrt(Math.Pow(intervalA, 2) + Math.Pow(intervalB, 2)) * 2; }
+        public override double Area() { return intervalA * intervalB / 2; }
+        public override void Print() {
+            Console.WriteLine($"  – ромб: длины диагоналей – {intervalA} и {intervalB}; периметр – {Perimeter()}; " +
+                $"площадь – {Area()};");
+        }
+    }
+    class Rectangle : GeometricFigure {
+        public Rectangle(double intervalA, double intervalB) : base(intervalA, intervalB) { }
+        public override double Perimeter() { return (intervalA + intervalB) * 2; }
+        public override double Area() { return intervalA * intervalB;}
+        public override void Print() {
+            Console.WriteLine($"  – прямоугольник: длины сторон – {intervalA} и {intervalB}; периметр – {Perimeter()}; " +
+                $"площадь – {Area()};");
+        }
+    }
+    class Parallelogram : GeometricFigure {
+        double a;
+        public Parallelogram(double intervalA, double intervalB, double a) : base(intervalA, intervalB) { this.a = a; }
+        public override double Perimeter() { return (intervalA + intervalB) * 2; }
+        public override double Area() { return intervalA * intervalB * Math.Sin(a * Math.PI / 180); }
+        public override void Print() {
+            Console.WriteLine($"  – параллелограмм: длины сторон – {intervalA} и {intervalB}; угол между ними – {a}°; " +
+                $"периметр – {Perimeter()}; площадь – {Area()};");
+        }
+    }
+    class Trapeze : GeometricFigure {
+        double hight;
+        public Trapeze(double intervalA, double intervalB, double hight) : base(intervalA, intervalB) { this.hight = hight; }
+        public override double Perimeter() {
+            return Math.Sqrt(Math.Pow(Math.Abs(intervalA - intervalB) / 2, 2) + Math.Pow(hight, 2)) * 2 + intervalA + intervalB; }
+        public override double Area() { return ((intervalA + intervalB) * hight) / 2; }
+        public override void Print() {
+            Console.WriteLine($"  – равнобедренная трапеция: основания – {intervalA} и {intervalB}; высота – {hight}; " +
+                $"периметр – {Perimeter()}; площадь – {Area()};");
+        }
+    }
+    class Сircle : GeometricFigure {
+        public Сircle(double intervalA, double intervalB = 0) : base(intervalA, intervalB) { }
+        public override double Perimeter() { return 2 * Pi * intervalA; }
+        public override double Area() { return Pi * Math.Pow(intervalA, 2); }
+        public override void Print() {
+            Console.WriteLine($"  – круг: радиус – {intervalA}; периметр – {Perimeter()}; площадь – {Area()};");
+        }
+    }
+    class Ellipse : GeometricFigure {
+        public Ellipse(double intervalA, double intervalB) : base(intervalA, intervalB) { }
+        public override double Perimeter() { return 2 * Pi * Math.Sqrt((Math.Pow(intervalA, 2) + 
+            Math.Pow(intervalA, 2)) / 2); }
+        public override double Area() { return Pi * intervalA * intervalB; }
+        public override void Print() {
+            Console.WriteLine($"  – эллипс: длины полуосей – {intervalA} и {intervalB}; периметр – {Perimeter()}; " +
+                $"площадь – {Area()};");
+        }
+    }
+    class CompositeFigure {
+        double compositeFigureResult;
+        public GeometricFigure[] compositeFigure;
+        public CompositeFigure(GeometricFigure[] compositeFigure) {
+            this.compositeFigure = compositeFigure;
+        Print();
+    }
+    public double Area() {
+        foreach (var item in compositeFigure)
+            compositeFigureResult += item.Area();
+        return compositeFigureResult;
+    }
+    public void Print() {
+        Console.WriteLine($"  – площадь составной фигуры – {Area()}.");
+    }
+}
+     internal class Program {
+        static void Main(string[] args) {
+            
+            Console.WriteLine("\n\t\tНАСЛЕДОВАНИЕ");
+
+            Console.WriteLine("\n\tЗадание \"Геометрические фигуры\"\n");
+            GeometricFigure[] figures = new GeometricFigure[8];
+            Console.WriteLine("  Характеристики:");
+            Triangle Tr = new Triangle(3, 4, 5);
+            Tr.Print();
+            figures[0] = Tr;
+            Square Sq = new Square(5);
+            Sq.Print();
+            figures[1] = Sq;
+            Rhombus Rh = new Rhombus(3, 4);
+            Rh.Print();
+            figures[2] = Rh;
+            Rectangle Rc = new Rectangle(3, 5);
+            Rc.Print();
+            figures[3] = Rc;
+            Parallelogram Pr = new Parallelogram(4, 4, 30);
+            Pr.Print();
+            figures[4] = Pr;
+            Trapeze Tz = new Trapeze (5, 11, 4);
+            Tz.Print();
+            figures[5] = Tz;
+            Сircle Cr = new Сircle(3);
+            Cr.Print();
+            figures[6] = Cr;
+            Ellipse El = new Ellipse(3, 4);
+            El.Print();
+            figures[7] = El;
+            CompositeFigure compositeFigure = new CompositeFigure(figures);
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
