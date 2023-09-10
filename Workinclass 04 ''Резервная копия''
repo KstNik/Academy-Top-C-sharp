@@ -1,0 +1,122 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace InformationCarriers {
+    abstract class Storage {
+        protected string name;
+        protected string model;
+        public Storage(string name, string model) {
+            this.name = name;
+            this.model = model;
+        }
+        public abstract double GetMemory();
+        public abstract void CopyData(double dataSize);
+        public abstract double GetFreeMemory();
+        public abstract void GetDeviceInfo();
+    }
+    class Flash : Storage {
+        private double usbSpeed;
+        private double memorySize;
+        public Flash(string name, string model, double usbSpeed, double memorySize) : base(name, model) {
+            this.usbSpeed = usbSpeed;
+            this.memorySize = memorySize;
+        }
+        public override double GetMemory() { return memorySize; }
+        public override void CopyData(double dataSize) {
+            Console.WriteLine("  Копирование данных на флэшку...");
+            double time = dataSize * 1024 / usbSpeed;
+            Console.WriteLine("    необходимое время: " + Math.Ceiling(time) + " сек.");
+        }
+        public override double GetFreeMemory() { return 0; }
+        public override void GetDeviceInfo() {
+            Console.WriteLine("  Флеш накопитель: " + name + " \"" + model + "\"");
+            Console.WriteLine("    объём памяти: " + memorySize + " ГБ");
+            Console.WriteLine("    скорость USB: " + usbSpeed + " МБ/с");
+        }
+    }
+    class DVD : Storage {
+        private double readSpeed;
+        private double writeSpeed;
+        private string discType;
+        public DVD(string name, string model, double readSpeed, double writeSpeed, string discType) : base(name, model) {
+            this.readSpeed = readSpeed;
+            this.writeSpeed = writeSpeed;
+            this.discType = discType;
+        }
+        public override double GetMemory() {
+            if (discType.Equals("односторонний"))
+                return 4.7;
+            else if (discType.Equals("двухсторонний"))
+                return 9;
+            return 0;
+        }
+        public override void CopyData(double dataSize) {
+            Console.WriteLine("  Копирование данных на DVD...");
+            double time = dataSize * 1024 / writeSpeed;
+            Console.WriteLine("    необходимое время: " + Math.Ceiling(time) + " сек.");
+        }
+        public override double GetFreeMemory() { return 0; }
+        public override void GetDeviceInfo() {
+            Console.WriteLine("  DVD: " + name + " \"" + model + "\"");
+            Console.WriteLine("    тип диска: " + discType);
+            Console.WriteLine("    скорость чтения: " + readSpeed + " МБ/с");
+            Console.WriteLine("    скорость записи: " + writeSpeed + " МБ/с");
+        }
+    }
+    class HDD : Storage {
+        private double usbSpeed;
+        private int partitionCount;
+        private double partitionSize;
+        public HDD(string name, string model, double usbSpeed, int partitionCount, double partitionSize) : base(name, model) {
+            this.usbSpeed = usbSpeed;
+            this.partitionCount = partitionCount;
+            this.partitionSize = partitionSize;
+        }
+        public override double GetMemory() { return partitionCount * partitionSize; }
+        public override void CopyData(double dataSize) {
+            Console.WriteLine("  Копирование данных на HDD...");
+            double time = dataSize * 1024 / usbSpeed;
+            Console.WriteLine("    необходимое время: " + Math.Ceiling(time) + " сек.");
+        }
+        public override double GetFreeMemory() { return 0; }
+        public override void GetDeviceInfo() {
+            Console.WriteLine("  HDD: " + name + " \"" + model + "\"");
+            Console.WriteLine("    количество разделов: " + partitionCount);
+            Console.WriteLine("    размер раздела: " + partitionSize + " ГБ");
+            Console.WriteLine("    скорость USB: " + usbSpeed + " МБ/с");
+        }
+    }
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tНАСЛЕДОВАНИЕ");
+
+            Console.WriteLine("\n\tЗадание \"Резервное копирование\"\n");
+            Storage[] devices = new Storage[] {
+            new Flash("Flash-память", "Kingston", 150, 64),
+            new DVD("DVD-диск", "Verbatim", 30, 20, "односторонний"),
+            new HDD("Съёмный HDD", "Seagate", 60, 2, 500),
+            };
+            foreach (Storage device in devices)
+                device.GetDeviceInfo();
+            double totalMemory = 0;
+            foreach (Storage device in devices)
+                totalMemory += device.GetMemory();
+            Console.WriteLine("  Общая память всех устройств: " + totalMemory + " ГБ");
+            double dataSize = 565;
+            foreach (Storage device in devices) {
+                device.CopyData(dataSize);
+                Console.WriteLine("    количество устройств: " + Math.Ceiling(dataSize / device.GetMemory()));
+            }
+            double copyTime = 0;
+            foreach (Storage device in devices)
+                copyTime = Math.Max(copyTime, dataSize / device.GetMemory());
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
