@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MorseCode {
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\t\t\tПОЛИМОРФИЗМ");
+            string text, morseCode;
+
+            Console.WriteLine("\n\tЗадание 1 \"Перевод текста в код азбуки Морзе\"\n");
+            Console.Write("  Введите текст (кирилица): ");
+            text = Console.ReadLine();
+            morseCode = TranslateToMorseCode(text);
+            Console.WriteLine($"  Код Морзе: {morseCode}");
+
+            Console.WriteLine("\n\tЗадание 2 \"Перевод кода азбуки Морзе в текст\"\n");
+            Console.WriteLine("  Внимание! Между символами обязательно вставлять пробелы");
+            Console.WriteLine("  Пример записи последовательности СОС: ... --- ...");
+            Console.Write("  Введите код Морзе: ");
+            morseCode = Console.ReadLine();
+            text = TranslateToText(morseCode);
+            Console.WriteLine($"  Текст: {text}");
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+        static string TranslateToMorseCode(string text) {
+            Dictionary<char, string> morseCodeDictionary = new Dictionary<char, string>() {
+                {'А', ".-"}, {'Б', "-..."}, {'В', ".--"}, {'Г', "--."}, {'Д', "-.."}, {'Е', "."}, {'Ё', "."}, {'Ж', "...-"}, 
+                {'З', "--.."}, {'И', ".."}, {'Й', ".---"}, {'К', "-.-"}, {'Л', ".-.."}, {'М', "--"}, {'Н', "-."}, {'О', "---"}, 
+                {'П', ".--."}, {'Р', ".-."}, {'С', "..."}, {'Т', "-"}, {'У', "..-"}, {'Ф', "..-."}, {'Х', "...."}, {'Ц', "-.-."}, 
+                {'Ч', "---."}, {'Ш', "----"}, {'Щ', "--.-"}, {'Ъ', ".--.-."}, {'Ы', "-.--"}, {'Ь', "-..-"}, {'Э', "..-.."}, 
+                {'Ю', "..--"}, {'Я', ".-.-"}, {'0', ".-----"}, {'1', ".----"}, {'2', "..---"}, {'3', "...--"}, {'4', "....-"}, 
+                {'5', "....."}, {'6', "-...."}, {'7', "--...."}, {'8', "---.."}, {'9', "----."}, {'.', "......"}, {',', ".-.-.-.-"}, 
+                {':', "---..."}, {';', "-.-.-."}, {'-', "-....-"}, {'/', "-..-."}, {'?', "..--.."}, {'!', "--..--"}, {'+', ".-.-."},
+                {' ', "-...-"}, {'@', ".--.-"}
+            };
+            string result = "";
+            foreach (char c in text.ToUpper()) {
+                if (morseCodeDictionary.ContainsKey(c)) {
+                    result += morseCodeDictionary[c] + " ";
+                }
+            }
+            return result;
+        }
+        static string TranslateToText(string morseCode) {
+            Dictionary<string, char> textDictionary = new Dictionary<string, char>() {
+               {".-", 'А'}, {"-...", 'Б'}, {".--", 'В'}, {"--.", 'Г'}, {"-..", 'Д'}, {".", 'Е'}, {"...-", 'Ж'}, {"--..", 'З'}, 
+               {"..", 'И'}, {".---", 'Й'}, {"-.-", 'К'}, {".-..", 'Л'}, {"--", 'М'}, {"-.", 'Н'}, {"---", 'О'}, {".--.", 'П'}, 
+               {".-.", 'Р'}, {"...", 'С'}, {"-", 'Т'}, {"..-", 'У'}, {"..-.", 'Ф'}, {"....", 'Х'}, {"-.-.", 'Ц'}, {"---.", 'Ч'}, 
+               {"----", 'Ш'}, {"--.-", 'Щ'}, {".--.-.", 'Ъ'}, {"-.--", 'Ы'}, {"-..-", 'Ь'}, {"..-..", 'Э'}, {"..--", 'Ю'}, 
+               {".-.-", 'Я'}, {".-----", '0'}, {".----", '1'}, {"..---", '2'}, {"...--", '3'}, {"....-", '4'}, {".....", '5'}, 
+               {"-....", '6'}, {"--....", '7'}, {"---..", '8'}, {"----.", '9'}, {"......", '.'}, {".-.-.-.-", ','}, {"---...", ':'}, 
+               {"-.-.-.", ';'}, {"-....-", '-'}, {"-..-.",'/'}, {"..--..", '?'}, {"--..--", '!'}, {".-.-.", '+'}, {"-...-", ' '},
+               {".--.-", '@'}
+            };
+            string[] codes = morseCode.Split(' ');
+            string result = "";
+            foreach (string code in codes) {
+                if (textDictionary.ContainsKey(code)) {
+                    result += textDictionary[code];
+                }
+            }
+            return result;
+        }
+    }
+}
