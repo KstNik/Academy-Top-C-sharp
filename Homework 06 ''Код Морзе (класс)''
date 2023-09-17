@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace Код_Морзе {
+    internal class Program {
+        class Morse {
+            static string[] _s1 = { "А", "Б","В","Г",
+            "Д", "Е","Ж", "З", "И", "Й", "К", "Л",
+            "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц",
+            "Ч","Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю",
+            "Я", ".", ",", "?", "!"};
+            static string[] _s2 = {"*-", "-***", "*--",  "--*",
+            "-**", "*", "***-", "--**", "**", "*---", "-*-", "*-**",
+            "--", "-*", "---", "*--*", "*-*", "***", "-", "**-","**-*",
+            "****", "-*-*", "---*", "----", "--*-", "--*--", "-*--",
+            "-**-", "**-**", "**--", "*-*-", "*-*-*-", "--**--", "**--**",
+            "-*-*--" };
+            public static void ToMorse(string text) {
+                for (int i = 0; i < 36; i++)
+                     text = text.Replace(_s1[i], _s2[i]);
+                Console.WriteLine(text);
+            }
+            public static void DeMorse(string text) {
+                int _count = 1;
+                for (int i = 0; i < text.Length; i++) {
+                    if (text[i] == ' ')
+                        _count++;
+                }
+                string[] words = text.Split(new char[] { ' ' });
+                for (int i = 0; i < _count; i++) {
+                    for (int j = 0; j < 36; j++) {
+                        if (words[i] == _s2[j])
+                            words[i] = _s1[j];
+                    }
+                }
+                for (int i = 0; i < _count; i++)
+                    Console.Write(words[i]);
+            }
+        }
+        static void Main(string[] args) {
+            Morse m = new Morse();
+            Console.WriteLine("Текст в морзянку");
+            string str = Console.ReadLine();
+            str = str.ToUpper();
+            str = Regex.Replace(str, "(.)(?=.)", "$1 ");
+            Morse.ToMorse(str);
+            Console.WriteLine("---------------------------------------------------------------------");
+            Console.WriteLine("Морзянка в текст, символы вводите через пробел, например(*** --- -*** *- -*- *-=собака)");
+            string str1 = Console.ReadLine();
+            Morse.DeMorse(str1);
+            Console.ReadKey();
+        }
+    }
+}
