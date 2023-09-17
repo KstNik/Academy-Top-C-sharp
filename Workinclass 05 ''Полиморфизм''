@@ -1,0 +1,175 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Polymorphism {
+    public class Human {
+        string _firstName;
+        string _lastName;
+        DateTime _birthDate;
+        public Human(string fName, string lName, DateTime date) {
+            _firstName = fName;
+            _lastName = lName;
+            _birthDate = date;
+        }
+        public virtual void ToString() {
+            Console.WriteLine($"  {_firstName} {_lastName}");
+            Console.WriteLine($"    родился: {_birthDate.ToShortDateString()}");
+        }
+    }
+    public class Builder : Human {
+        int _category;
+        public Builder(string fName, string lName, DateTime date, int experience) : base(fName, lName, date) { _category = experience; }
+        public override void ToString() {
+            base.ToString();
+            Console.WriteLine($"    профессия: строитель, разряд – {_category}");
+        }
+    }
+    public class Pilot : Human {
+        string _type;
+        public Pilot(string fName, string lName, DateTime date, string type) : base(fName, lName, date) { _type = type; }
+        public override void ToString() {
+            base.ToString();
+            Console.WriteLine($"    профессия: {_type} лётчик");
+        }
+    }
+    public class Sailor : Human {
+        string _type;
+        public Sailor(string fName, string lName, DateTime date, string type) : base(fName, lName, date) { _type = type; }
+        public override void ToString() {
+            base.ToString();
+            Console.WriteLine($"    профессия: моряк - {_type}");
+        }
+    }
+    public class Passport
+    {
+        string _firstName;
+        string _secondName;
+        string _lastName;
+        string _gender;
+        DateTime _birthDate;
+        string _country;
+        string _serial;
+        DateTime _dateIssue;
+        public Passport(string fName, string sName, string lName, string gender, DateTime date, string country,
+            string serial, DateTime dateIssue) {
+            _firstName = fName;
+            _secondName = sName;
+            _lastName = lName;
+            _gender = gender;
+            _birthDate = date;
+            _country = country;
+            _serial = serial;
+            _dateIssue = dateIssue;
+        }
+        public override string ToString() {
+            return $"\t\tПаспорт\n  Имя: {_firstName}\n  Фамилия: {_secondName}\n  Отчество: {_lastName}\n  Пол: {_gender}" +
+               $"\n  Дата рождения: {_birthDate.ToShortDateString()}\n  Страна проживания: {_country}" +
+               $"\n  Серия: {_serial}\n  Дата выдачи: {_dateIssue.ToShortDateString()}";
+        }
+    }
+    class ForeignPassport : Passport {
+        DateTime _begin;
+        DateTime _end;
+        DateTime _making;
+        string _countryMaking;
+        string _type;
+        string _number;
+        public ForeignPassport(string fName, string sName, string lName, string gender, DateTime date, string country, string serial,
+            DateTime dateIssue, DateTime begin, DateTime end, string cMaking, DateTime making, string type, string number) : base(fName,
+            sName, lName, gender, date, country, serial, dateIssue) {
+            _begin = begin;
+            _end = end;
+            _countryMaking = cMaking;
+            _making = making;
+            _type = type;
+            _number = number;
+        }
+        public override string ToString() {
+            return base.ToString() + $"\n  Виза:\n  – начало действия: {_begin.ToShortDateString()}\n" +
+            $"  – окончание действия: {_end.ToShortDateString()}\n  – страна: {_countryMaking}\n  " +
+            $"– дата выдачи: {_making.ToShortDateString()}\n  – тип: {_type}\n  – номер: {_number}";
+        }
+    }
+    public abstract class Animal {
+        string _name;
+        string _class;
+        string _living;
+        public Animal(string name, string cl, string living) {
+            _name = name;
+            _class = cl;
+            _living = living;
+        }
+        public override string ToString() {
+            return $"\t\t{_name}\n  Класс: {_class}\n  Ареал обитания: {_living}\n";
+        }
+    }
+    class Tiger : Animal {
+        int _weight;
+        public Tiger(string name, string cl, string living, int weight) : base(name, cl, living) {
+            _weight = weight;
+        }
+        public override string ToString() {
+            return base.ToString() + $"  Вес: {_weight} кг";
+        }
+    }
+    class Crocodile : Animal {
+        Boolean _herbivorous;
+        public Crocodile(string name, string cl, string living, Boolean herbivorous) : base(name, cl, living) {
+            _herbivorous = herbivorous;
+        }
+        public override string ToString() {
+            return base.ToString() + $"  Рацион: {(_herbivorous ? "трав":"плот")}оядный";
+        }
+    }
+    class Kengaroo : Animal {
+        string _type;
+        public Kengaroo(string name, string cl, string living, string type) : base(name, cl, living) {
+            _type = type;
+        }
+        public override string ToString() {
+            return base.ToString() + $"  Инфракласс: {_type}";
+        }
+    }
+    internal class Program {
+        static void Main(string[] args) {
+            Console.WriteLine("\n\t\tПОЛИМОРФИЗМ");
+            
+            Console.WriteLine("\n\tЗадание 1 \"Класс \"Human\"\n");
+            Human[] jobs = {new Human("Иван", "Иванов", new DateTime(2000, 01, 01)),
+                new Builder("Иван", "Жолтовский", new DateTime(1867, 11, 27), 6),
+                new Pilot("Валерий", "Чкалов", new DateTime(1904, 02, 02), "военный"),
+                new Sailor("Фрэнсис", "Дрейк", new DateTime(1540, 07, 13), "флибустьер")
+            };
+            foreach (Human item in jobs)
+                item.ToString();
+            
+            Console.WriteLine("\n\tЗадание 2 \"Класс \"Passport\"\n");
+            Passport[] papers = {
+            new Passport("Пётр", "Петров", "Петрович", "Мужской", new DateTime(2000,1,1),"Россия", "1111 123456", new DateTime(2014,1,1)),
+            new ForeignPassport("Сидор", "Сидоров", "Сидорович", "Мужской", new DateTime(1999,9,9),"Россия", "1234 777777", new DateTime(2015,1,1),
+            new DateTime(2023,1,1), new DateTime(2024,1,1), "США", new DateTime(2022,12,31), "B-2", "1234567890")
+            };
+            foreach (Passport item in papers) {
+                Console.WriteLine(item);
+                item.ToString();
+            }
+            
+            Console.WriteLine("\n\tЗадание 3 \"Класс \"Animal\"\n");
+            Animal[] kind = {
+                new Tiger("Тигр", "Млекопитающие", "Азия", 400),
+                new Crocodile("Аллигатор", "Рептилии", "Центральная Америка", false),
+                new Kengaroo("Кенгуру", "Млекопитающие", "Австралия", "Сумчатые")
+            };
+            foreach (Animal item in kind) {
+                Console.WriteLine(item);
+                item.ToString();
+            }
+            
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
