@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication.ExtendedProtection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Inheritance {
+    public class CreditCard {
+        string _cardowner;
+        int _CVC;
+        long _number;
+        DateTime _expirationDate;
+        double _balance;
+        int _code;
+        public long Number {
+            get { return _number; }
+            set { _number = value; }
+        }
+        public double Balance {
+            get { return _balance; }
+            set { _balance = value; }
+        }
+        public int Code {
+            get { return _code; }
+            set { _code = value; }
+        }
+        public CreditCard(string cardowner, long number, DateTime expirationDate, int CVC, double balance, int code) {
+            _cardowner = cardowner;
+            _number = number;
+            _expirationDate = expirationDate;
+            _CVC = CVC;
+            _balance = balance;
+            _code = code;
+        }
+        public override string ToString() {
+            return $"  Кредитная карта:\n  – владелец: {_cardowner}\n  – номер карты: {_number}\n  – окончание действия: {_expirationDate.ToShortDateString()}\n  – CVC: {_CVC}\n" +
+                $"  – баланс: {_balance} руб.\n  – код: {_code}";
+        }
+        public void PrintBalance() { Console.WriteLine("  – баланс: " + _balance + " руб."); }
+        public static CreditCard operator +(CreditCard card, double cash) {
+            card.Balance += cash;
+            return card;
+        }
+        public static CreditCard operator -(CreditCard card, double cash) {
+            card.Balance -= cash;
+            return card;
+        }
+        public static bool operator ==(CreditCard card, int code) { return card.Code == code; }
+        public static bool operator !=(CreditCard card, int code) { return card.Code != code; }
+        public static bool operator <(CreditCard card1, CreditCard card2) { return card1.Balance < card2.Balance; }
+        public static bool operator >(CreditCard card1, CreditCard card2) { return card1.Balance > card2.Balance; }
+        public override bool Equals(object obj) {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+            CreditCard card = (CreditCard)obj;
+            return Number == card.Number;
+        }
+        public override int GetHashCode() { return Number.GetHashCode(); }
+    }
+
+    class Program {
+        static void Main(string[] args) {
+            
+            Console.WriteLine("\n\t\tНАСЛЕДОВАНИЕ");
+            
+            Console.WriteLine("\n\tЗадание \"Кредитная карта\"\n");
+            CreditCard bc = new CreditCard("Иванов Иван", 1111222233334444, new DateTime(2025, 01, 01), 876, 10000, 2442);
+            Console.WriteLine(bc.ToString());
+            Console.WriteLine("  Зачисление / списание денежных средств:");
+            (bc + 1000).PrintBalance();
+            (bc - 500).PrintBalance();
+            Console.WriteLine("  Проверка кода, результат:");
+            Console.Write("  – 2442: ");
+            Console.WriteLine(bc == 2442);
+            Console.Write("  – 1234: ");
+            Console.WriteLine(bc == 1234);
+            CreditCard bcOther = new CreditCard("Петров Пётр", 5555666677778888, new DateTime(2026, 02, 02), 345, 5000, 1001);
+            Console.WriteLine(bcOther.ToString());
+            Console.WriteLine("  Сравнение балансов карт, результат:");
+            Console.Write("  – 1-ой < 2-ой: ");
+            Console.WriteLine(bc < bcOther);
+            Console.Write("  – 1-ой > 2-ой: ");
+            Console.WriteLine(bc > bcOther);
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
