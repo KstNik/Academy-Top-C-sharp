@@ -135,6 +135,7 @@ namespace Polymorphism {
     }
     internal class Program {
         static void Main(string[] args) {
+            
             Console.WriteLine("\n\t\tПОЛИМОРФИЗМ");
             
             Console.WriteLine("\n\tЗадание 1 \"Класс \"Human\"\n");
