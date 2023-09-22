@@ -62,7 +62,7 @@ namespace Inheritance {
     class Program {
         static void Main(string[] args) {
             
-            Console.WriteLine("\n\t\tНАСЛЕДОВАНИЕ");
+            Console.WriteLine("\n\t\tПЕРЕГРУЗКА");
             
             Console.WriteLine("\n\tЗадание \"Кредитная карта\"\n");
             CreditCard bc = new CreditCard("Иванов Иван", 1111222233334444, new DateTime(2025, 01, 01), 876, 10000, 2442);
