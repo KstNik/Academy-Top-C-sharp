@@ -91,9 +91,9 @@ namespace InformationCarriers {
     }
     class Program {
         static void Main(string[] args) {
-            
+
             Console.WriteLine("\n\t\tНАСЛЕДОВАНИЕ");
-            
+
             Console.WriteLine("\n\tЗадание \"Резервное копирование\"\n");
             Storage[] devices = new Storage[] {
             new Flash("Flash-память", "Kingston", 150, 64),
