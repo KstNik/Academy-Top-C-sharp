@@ -135,9 +135,9 @@ namespace Polymorphism {
     }
     internal class Program {
         static void Main(string[] args) {
-            
+
             Console.WriteLine("\n\t\tПОЛИМОРФИЗМ");
-            
+
             Console.WriteLine("\n\tЗадание 1 \"Класс \"Human\"\n");
             Human[] jobs = {new Human("Иван", "Иванов", new DateTime(2000, 01, 01)),
                 new Builder("Иван", "Жолтовский", new DateTime(1867, 11, 27), 6),
@@ -146,7 +146,7 @@ namespace Polymorphism {
             };
             foreach (Human item in jobs)
                 item.ToString();
-            
+
             Console.WriteLine("\n\tЗадание 2 \"Класс \"Passport\"\n");
             Passport[] papers = {
             new Passport("Пётр", "Петров", "Петрович", "Мужской", new DateTime(2000,1,1),"Россия", "1111 123456", new DateTime(2014,1,1)),
@@ -157,7 +157,7 @@ namespace Polymorphism {
                 Console.WriteLine(item);
                 item.ToString();
             }
-            
+
             Console.WriteLine("\n\tЗадание 3 \"Класс \"Animal\"\n");
             Animal[] kind = {
                 new Tiger("Тигр", "Млекопитающие", "Азия", 400),
@@ -168,7 +168,7 @@ namespace Polymorphism {
                 Console.WriteLine(item);
                 item.ToString();
             }
-            
+
             Console.Write("\n  Для выхода нажмите любую клавишу ");
             Console.ReadKey();
         }
