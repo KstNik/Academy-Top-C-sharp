@@ -1,0 +1,75 @@
+using List_books;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace List_books {
+    class Book {
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public Book(string title, string author) { Title = title; Author = author; }
+        public static bool operator ==(Book book1, Book book2) {
+            return book1.Title == book2.Title && book1.Author == book2.Author;
+        }
+        public static bool operator !=(Book book1, Book book2) {
+            return !(book1 == book2);
+        }
+        public override bool Equals(object obj) {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+            return true;
+        }
+        public override int GetHashCode() { return GetHashCode(); }
+        public override string ToString() { return $"    \"{Title}\" {Author}"; }
+    }
+    class BookList {
+        private List<Book> books = new List<Book>();
+        public void Add(Book book) { books.Add(book); }
+        public void Remove(Book book) { books.Remove(book); }
+        public bool EntryBook(Book bookVerif) {
+            bool entry = false;
+            foreach (var book in books)
+               if (book == bookVerif)
+                    entry = true;
+            return entry;
+        }
+        public void PrintAllBooks() {
+            foreach (var book in books)
+                Console.WriteLine(book);
+        }
+        public Book this[int index] {
+            get { return books[index]; }
+            set { books[index] = value; }
+        }
+    }
+    internal class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\tПЕРЕГРУЗКА ИНДЕКСАТОРОВ");
+
+            Console.WriteLine("\n\tЗадание \"Список книг\"\n");
+            Console.WriteLine("  Создание (добавление):");
+            BookList bookList = new BookList();
+            bookList.Add(new Book("Записки о Шерлоке Холмсе", "Артур Конан Дойл"));
+            bookList.Add(new Book("Пасынки Вселенной", "Роберт Энсон Хайнлайн"));
+            bookList.Add(new Book("Зов предков", "Джек Лондон"));
+            bookList.PrintAllBooks();
+            Console.WriteLine("  Проверка вхождения:");
+            Book bookCheckFirst = new Book("Белый клык", "Джек Лондон");
+            Console.WriteLine(bookCheckFirst.ToString() + " – " + bookList.EntryBook(bookCheckFirst));
+            Book bookCheckSecond = new Book("Зов предков", "Джек Лондон");
+            Console.WriteLine(bookCheckSecond.ToString() + " – " + bookList.EntryBook(bookCheckSecond));
+            Console.WriteLine("  Удаление:");
+            bookList.Remove(bookList[0]);
+            bookList.PrintAllBooks();
+            Console.WriteLine("  Изменение:");
+            bookList[1] = new Book("Остров сокровищ", "Роберт Льюис Стивенсон");
+            bookList.PrintAllBooks();
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
