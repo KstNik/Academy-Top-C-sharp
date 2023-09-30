@@ -1,0 +1,260 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Geometric_figures {
+    public abstract class GeometricFigure {
+        protected double areaFigure;
+        protected double perimeterFigure;
+        public const double Pi = 3.14;
+        public double AreaFigure => areaFigure;
+        public double PerimeterFigure => perimeterFigure;
+        public abstract void Print();
+    }
+    public interface ISimplePolygon {
+        double Height { get; set; }
+        double Base { get; set; }
+        double Angle { get; set; }
+        int NumberSides { get; }
+        double[] LengthsSide { get; set; }
+        double Area { get; }
+        double Perimeter { get; }
+    }
+    public class Triangle : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 3;
+        public double[] LengthsSide { get; set; }
+        public double Area { get {
+                if ((LengthsSide[0] > 0) && (LengthsSide[1] > 0) && (LengthsSide[2] > 0) && (LengthsSide[0] + LengthsSide[1] > LengthsSide[2])
+                    && (LengthsSide[0] + LengthsSide[2] > LengthsSide[1]) && (LengthsSide[1] + LengthsSide[2] > LengthsSide[0]))
+                    return Math.Sqrt(Perimeter / 2 * (Perimeter / 2 - LengthsSide[0]) * 
+                        (Perimeter / 2 - LengthsSide[1]) * (Perimeter / 2 - LengthsSide[2]));
+                else
+                    return 0;
+            } 
+        }
+        public double Perimeter { get { return LengthsSide[0] + LengthsSide[1] + LengthsSide[2]; } } 
+        public override void Print() {
+            Console.Write("  – треугольник: ");
+            if (Area > 0)
+                Console.WriteLine($"длины сторон – {LengthsSide[0]}, {LengthsSide[1]} и {LengthsSide[2]}; " +
+                    $"периметр – {Perimeter}; площадь – {Area};");
+            else
+                Console.WriteLine("длины сторон заданы неверно;");
+        }
+    }
+    public class Square : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 4;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if (LengthsSide[0] > 0)
+                    return Math.Pow(LengthsSide[0], 2);
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return LengthsSide[0] * 4; } }
+        public override void Print() {
+            Console.Write("  – квадрат: ");
+            if (Area > 0)
+                Console.WriteLine($"длина стороны – {LengthsSide[0]}; периметр – {Perimeter}; площадь – {Area};");
+            else
+                Console.WriteLine("длина стороны задана неверно;");
+        }
+    }
+    public class Rhombus : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 4;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if ((LengthsSide[0] > 0) && (Base > 0) && (LengthsSide[0] >= Base))
+                    return LengthsSide[0] * Base;
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return LengthsSide[0] * 4; } }
+        public override void Print() {
+            Console.Write("  – ромб: ");
+            if (Area > 0)
+                Console.WriteLine($"длина стороны – {LengthsSide[0]}; высота – {Base}; периметр – {Perimeter}; " +
+                    $"площадь – {Area};");
+            else
+                Console.WriteLine("длина стороны и (или) высота заданы неверно;");
+        }
+    }
+    public class Rectangle : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 4;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if ((LengthsSide[0] > 0) && (LengthsSide[1] > 0))
+                    return LengthsSide[0] * LengthsSide[1];
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return (LengthsSide[0] + LengthsSide[1]) * 2; } }
+        public override void Print() {
+            Console.Write("  – прямоугольник: ");
+            if (Area > 0)
+                Console.WriteLine($"длины сторон – {LengthsSide[0]} и {LengthsSide[1]}; периметр – {Perimeter}; " +
+                    $"площадь – {Area};");
+            else
+                Console.WriteLine("длины сторон заданы неверно;");
+        }
+    }
+    public class Parallelogram : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 4;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if ((LengthsSide[0] > 0) && (LengthsSide[1] > 0) && (Angle > 0) && (Angle < 180))
+                    return LengthsSide[0] * LengthsSide[1] * Math.Sin(Angle * Math.PI / 180);
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return (LengthsSide[0] + LengthsSide[1]) * 2; } }
+        public override void Print() {
+            Console.Write("  – параллелограмм: ");
+            if (Area > 0)
+                Console.WriteLine($"длины сторон – {LengthsSide[0]} и {LengthsSide[1]}; угол между ними – {Angle}°; " +
+                $"периметр – {Perimeter}; площадь – {Area};");
+            else
+                Console.WriteLine("длины сторон и (или) угол между ними заданы неверно;");
+        }
+    }
+    public class Trapeze : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 4;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if ((Base > 0) && (Height > 0) && (LengthsSide[0] > 0))
+                    return ((Base + LengthsSide[0]) * Height) / 2;
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return Math.Sqrt(Math.Pow(Math.Abs(Base - LengthsSide[0]) / 2, 2) 
+            + Math.Pow(Height, 2)) * 2 + Base + LengthsSide[0]; } }
+        public override void Print() {
+            Console.Write("  – равнобедренная трапеция: ");
+            if (Area > 0)
+                Console.WriteLine($"основания – {Base} и {LengthsSide[0]}; высота – {Height}; " +
+                $"периметр – {Perimeter}; площадь – {Area};");
+            else
+                Console.WriteLine("длины сторон и (или) высота заданы неверно;");
+        }
+    }
+    public class Сircle : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 0;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if (Base > 0)
+                    return Pi * Math.Pow(Base, 2);
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return 2 * Pi * Base; } }
+        public override void Print() {
+            Console.Write("  – круг: ");
+            if (Area > 0)
+                Console.WriteLine($"радиус – {Base}; периметр – {Perimeter}; площадь – {Area};");
+            else
+                Console.WriteLine("радиус задан неверно;");
+        }
+    }
+    public class Ellipse : GeometricFigure, ISimplePolygon {
+        public double Height { get; set; }
+        public double Base { get; set; }
+        public double Angle { get; set; }
+        public int NumberSides => 0;
+        public double[] LengthsSide { get; set; }
+        public double Area {
+            get {
+                if ((Base > 0) && (Height > 0))
+                    return Pi * Base * Height;
+                else
+                    return 0;
+            }
+        }
+        public double Perimeter { get { return Math.Round(2 * Pi * Math.Sqrt((Math.Pow(Base, 2) + Math.Pow(Height, 2)) / 2), 2); } } 
+        public override void Print() {
+            Console.Write("  – эллипс: ");
+            if (Area > 0)
+                Console.WriteLine($"длины полуосей – {Base} и {Height}; периметр – {Perimeter}; площадь – {Area};");
+            else
+                Console.WriteLine("одна или обе полуоси заданы неверно;");
+        }
+    }
+    public class CompoundFigure : GeometricFigure {
+        private ISimplePolygon[] figures;
+        public CompoundFigure(ISimplePolygon[] figures) { this.figures = figures; }
+        public double FindArea() {
+            double area = 0;
+            foreach (ISimplePolygon figure in figures)
+                area += figure.Area;
+            areaFigure = area;
+            return areaFigure;
+        }
+        public override void Print() {
+            Console.WriteLine($"  – площадь составной фигуры – {FindArea()}.");
+        }
+    }
+    internal class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\t\t\tИНТЕРФЕЙСЫ");
+
+            Console.WriteLine("\n\t\t\tЗадание \"Геометрические фигуры\"\n");
+            Console.WriteLine("  Характеристики:");
+            Triangle Tr = new Triangle() { LengthsSide = new double[] { 3, 4, 5 } };
+            Tr.Print();
+            Square Sq = new Square() { LengthsSide = new double[] { 5 } };
+            Sq.Print();
+            Rhombus Rh = new Rhombus() { Base = 3, LengthsSide = new double[] { 4 } };
+            Rh.Print();
+            Rectangle Rc = new Rectangle() { LengthsSide = new double[] { 3, 5 } };
+            Rc.Print();
+            Parallelogram Pr = new Parallelogram() { Angle = 30, LengthsSide = new double[] { 4, 6 } };
+            Pr.Print();
+            Trapeze Tz = new Trapeze() { Base = 11, Height = 4, LengthsSide = new double[] { 5 } };
+            Tz.Print();
+            Сircle Cr = new Сircle() { Base = 3 };
+            Cr.Print();
+            Ellipse El = new Ellipse() { Base = 4, Height = 3 };
+            El.Print();
+            CompoundFigure Cf = new CompoundFigure(new ISimplePolygon[] { Tr, Sq, Rh, Rc, Pr, Tz, Cr, El });
+            Cf.Print();
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
