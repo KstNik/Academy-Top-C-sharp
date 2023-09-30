@@ -86,8 +86,8 @@ namespace Geometric_figure {
     }
     class Ellipse : GeometricFigure {
         public Ellipse(double intervalA, double intervalB) : base(intervalA, intervalB) { }
-        public override double Perimeter() { return 2 * Pi * Math.Sqrt((Math.Pow(intervalA, 2) + 
-            Math.Pow(intervalA, 2)) / 2); }
+        public override double Perimeter() { return Math.Round(2 * Pi * Math.Sqrt((Math.Pow(intervalA, 2) + 
+            Math.Pow(intervalB, 2)) / 2), 2); }
         public override double Area() { return Pi * intervalA * intervalB; }
         public override void Print() {
             Console.WriteLine($"  – эллипс: длины полуосей – {intervalA} и {intervalB}; периметр – {Perimeter()}; " +
@@ -130,7 +130,7 @@ namespace Geometric_figure {
             Rectangle Rc = new Rectangle(3, 5);
             Rc.Print();
             figures[3] = Rc;
-            Parallelogram Pr = new Parallelogram(4, 4, 30);
+            Parallelogram Pr = new Parallelogram(4, 6, 30);
             Pr.Print();
             figures[4] = Pr;
             Trapeze Tz = new Trapeze (5, 11, 4);
