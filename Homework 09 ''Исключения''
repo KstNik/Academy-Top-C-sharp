@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Exceptions {
+    internal class Program {
+        static void StringСonversion(Boolean binary = false) {
+            Console.Write("  Введите строку (набор символов - " + (binary ? "\"0\" и \"1\"" : "от \"0\" до \"9\" и \"-\"") 
+                + "): ");
+            string input = Console.ReadLine();
+            try {
+                int number = binary ? Convert.ToInt32(input, 2) : int.Parse(input);
+                Console.WriteLine("  Результат: " + number);
+            }
+            catch (OverflowException) {
+                Console.WriteLine("  ОШИБКА! Выход за границы диапазона int!");
+            }
+            catch (FormatException) {
+                Console.WriteLine("  ОШИБКА! Некорректный ввод!");
+            }
+            catch (ArgumentException) {
+                Console.WriteLine("  ОШИБКА! Строка пустая или содержит знак \"-\"!");
+            }
+        }
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\t\t\tИСКЛЮЧЕНИЯ");
+
+            Console.WriteLine("\n\tЗадание 1 \"Преобразование строки в целое число\"\n");
+            StringСonversion();
+
+            Console.WriteLine("\n\tЗадание 2 \"Преобразование бинарной строки в целое число\"\n");
+            StringСonversion(true);
+
+            Console.WriteLine("\n\tЗадание 3 \"Вычисление произведения строки\"\n");
+            Console.Write("  Введите строку (набор символов - от \"0\" до \"9\", \"-\" и \"*\"): ");
+            string input = Console.ReadLine();
+            try {
+                string[] numbers = input.Split('*');
+                int result = 1;
+                foreach (string number in numbers)
+                    result *= int.Parse(number);
+                Console.WriteLine("  Результат: " + result);
+            }
+            catch (FormatException) {
+                Console.WriteLine("  ОШИБКА! Некорректный ввод!");
+            }
+            catch (Exception) {
+                Console.WriteLine("  Произошла ошибка при вычислении!");
+            }
+
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
