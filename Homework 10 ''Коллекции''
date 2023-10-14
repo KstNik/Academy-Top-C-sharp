@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Collections {
+    internal class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\t\tКОЛЛЕКЦИИ");
+
+            Console.WriteLine("\n\tЗадание \"Перевод наименований стран\"\n");
+            Dictionary<string, string> dictRusEng = new Dictionary<string, string> { { "Германия", "Germany" }, 
+                { "Израиль", "Israel" }, { "Китай", "China" }, { "Россия", "Russia" }, { "Франция", "France" },
+            };
+            Dictionary<string, string> dictEngRus = new Dictionary<string, string> { { "Germany", "Германия" },
+                { "Israel", "Израиль" }, { "China", "Китай" }, { "Russia", "Россия" }, { "France", "Франция" },
+            };
+            Console.WriteLine("  ВНИМАНИЕ! Словарь содержит названия следующих стран:");
+            Console.WriteLine("            Германия, Израиль, Китай, Россия, Франция.");
+            while (true) {
+                Console.WriteLine("  Выберите направление перевода:");
+                Console.WriteLine("    1. Русский -> Английский");
+                Console.WriteLine("    2. Английский -> Русский");
+                Console.WriteLine("    0. Выход");
+                Console.WriteLine("  Введите:");
+                Console.Write("    - соответствующее число: ");
+                int choice = Convert.ToInt32(Console.ReadLine());
+                switch (choice) {
+                    case 1:
+                        TranslateWord(dictRusEng, "русском", "английский");
+                        break;
+                    case 2:
+                        TranslateWord(dictEngRus, "английском", "русский");
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        Console.WriteLine("  Неправильный выбор, попробуйте снова!");
+                        break;
+                }
+            }
+        }
+        static void TranslateWord(Dictionary<string, string> dict, string fromLanguage, string toLanguage) {
+            Console.Write($"    - слово на {fromLanguage}: ");
+            string word = Console.ReadLine();
+            if (dict.ContainsKey(word)) {
+                string translation = dict[word];
+                Console.WriteLine($"    - перевод слова \"{word}\" на {toLanguage}: {translation}");
+            }
+            else 
+                Console.WriteLine("    - перевод не найден!");
+        }
+    }
+}
