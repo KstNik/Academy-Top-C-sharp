@@ -1,0 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Statistics {
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tКОЛЛЕКЦИИ GENERIC");
+
+            Console.WriteLine("\n\tЗадание \"Статистика, количество \n\t\tповторений слов\"\n");
+            string text = "Вот дом, Который построил Джек. А это пшеница, Которая в темном чулане хранится В доме, " +
+                "Который построил Джек. А это веселая птица-синица, Которая часто ворует пшеницу, Которая в темном чулане хранится " +
+                "В доме, Который построил Джек.";
+            string[] words = text.Split(new char[] { ' ', '.', ',', '-', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, int> wordCount = new Dictionary<string, int>();
+            foreach (string word in words) {
+                if (wordCount.ContainsKey(word))
+                    wordCount[word]++;
+                else
+                    wordCount[word] = 1;
+            }
+            Console.WriteLine("  № п\\п\t\tСлово: \t\t Кол-во:");
+            Console.WriteLine("  ---------------------------------------");
+            int count = 1;
+            foreach (KeyValuePair<string, int> pair in wordCount) {
+                Console.WriteLine($"  {count}.\t\t{pair.Key}       \t\t{pair.Value}");
+                count++;
+            }
+            Console.WriteLine($"  Всего слов: {words.Length} из них уникальных: {wordCount.Count}");
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+    }
+}
