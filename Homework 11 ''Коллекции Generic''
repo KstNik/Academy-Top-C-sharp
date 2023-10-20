@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Person {
+   enum Gender {
+        мужской,
+        женский
+    }
+    class Person {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public Gender Gender { get; set; }
+        public Person(string name, int age, Gender gender) { Name = name; Age = age; Gender = gender; }
+        public override string ToString() { return $"  – имя: {Name}, возраст: {Age}, пол: {Gender}"; }
+    }
+    class Program {
+        static void Main(string[] args) {
+            Console.WriteLine("\n\t\tКОЛЛЕКЦИИ GENERIC");
+
+            Console.WriteLine("\n\tЗадание \"Класс \"Person\"\n");
+            List<Person> people = new List<Person>();
+            while (true) {
+                Console.WriteLine("  Выберите действие:");
+                Console.WriteLine("  1. Добавить нового человека");
+                Console.WriteLine("  2. Удалить человека по индексу");
+                Console.WriteLine("  3. Найти человека по имени");
+                Console.WriteLine("  4. Вывести всех людей");
+                Console.WriteLine("  5. Выход");
+                Console.WriteLine("  Введите: ");
+                Console.Write("  – № выбранного пункта: ");
+                int choice;
+                if (int.TryParse(Console.ReadLine(), out choice)) {
+                    switch (choice) {
+                        case 1:
+                            AddPerson(people);
+                            break;
+                        case 2:
+                            RemovePerson(people);
+                            break;
+                        case 3:
+                            FindPersonByName(people);
+                            break;
+                        case 4:
+                            PrintPeople(people);
+                            break;
+                        case 5:
+                            return;
+                        default:
+                            Console.WriteLine("  Неправильный выбор!");
+                            break;
+                    }
+                }
+                else
+                     Console.WriteLine("  Неправильный выбор!");
+            }
+        }
+        static void AddPerson(List<Person> people) {
+            Console.Write("  – имя: ");
+            string name = Console.ReadLine();
+            Console.Write("  – возраст: ");
+            int age;
+            if (!int.TryParse(Console.ReadLine(), out age)) {
+                Console.WriteLine("    Неправильный формат возраста!");
+                return;
+            }
+            Console.Write("  – пол (мужской/женский): ");
+            Gender gender;
+            if (!Enum.TryParse(Console.ReadLine(), out gender)) {
+                Console.WriteLine("    Некорректное название пола!");
+                return;
+            }
+            Person person = new Person(name, age, gender);
+            people.Add(person);
+            Console.WriteLine("  Человек добавлен в коллекцию");
+            Console.WriteLine();
+        }
+        static void RemovePerson(List<Person> people) {
+            Console.Write("  – индекс человека (нумерация с 0): ");
+            int index;
+            if (!int.TryParse(Console.ReadLine(), out index) || index < 0 || index >= people.Count) {
+                Console.WriteLine("    Некорректный индекс!");
+                return;
+            }
+            people.RemoveAt(index);
+            Console.WriteLine("  Человек удален из коллекции");
+            Console.WriteLine();
+        }
+        static void FindPersonByName(List<Person> people) {
+            Console.Write("  – имя для поиска: ");
+            string name = Console.ReadLine();
+            List<Person> matchingPeople = people.FindAll(person => person.Name == name);
+            if (matchingPeople.Count > 0) {
+                Console.WriteLine($"  Найдено {matchingPeople.Count} человек(а):");
+                foreach (var person in matchingPeople)
+                      Console.WriteLine(person);
+            }
+            else
+                Console.WriteLine("  Человек не найден");
+            Console.WriteLine();
+        }
+        static void PrintPeople(List<Person> people) {
+            Console.WriteLine("  Список людей:");
+            foreach (var person in people)
+                Console.WriteLine(person);
+            Console.WriteLine();
+        }
+    }
+}
