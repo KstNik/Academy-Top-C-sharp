@@ -1,6 +1,6 @@
 # Academy-Top-C-sharp
 
-#### Экзаменационные работы C#
+#### Экзаменационная работа C#
 
 ## ExaminationWork
 
