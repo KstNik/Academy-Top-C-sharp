@@ -30,6 +30,7 @@ namespace Statistics {
                 count++;
             }
             Console.WriteLine($"  Всего слов: {words.Length} из них уникальных: {wordCount.Count}");
+
             Console.Write("\n  Для выхода нажмите любую клавишу ");
             Console.ReadKey();
         }
