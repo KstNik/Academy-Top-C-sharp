@@ -1,0 +1,81 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BinaryFile {
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tВЗАИМОДЕЙСТВИЕ С ФАЙЛОВОЙ СИСТЕМОЙ");
+
+            Console.WriteLine("\n\t\tЗадание \"Работа с бинарным файлом\"\n");
+            string fileName = "numbers.bin";
+            Random rand = new Random();
+            using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Create))) {
+                Console.Write("  Массив чисел, содержащийся в файле: ");
+                for (int i = 0; i < 10; i++) {
+                    int number = rand.Next(10, 100);
+                    Console.Write(number + " ");
+                    writer.Write(number);
+                }
+                Console.WriteLine();
+            }
+            if (!File.Exists(fileName)) {
+                Console.WriteLine("  Файл не найден!");
+                Console.Write("\n  Для выхода нажмите любую клавишу ");
+                Console.ReadKey();
+                return;
+            }
+            try {
+                long fileSize = new FileInfo(fileName).Length;
+                if (fileSize == 0) {
+                    Console.WriteLine("Файл пуст");
+                    return;
+                }
+                int minPosition = FindMinPosition(fileName);
+                using (BinaryWriter writer = new BinaryWriter(File.Open(fileName, FileMode.Open))) {
+                    writer.Seek(minPosition, SeekOrigin.Begin);
+                    writer.Write(0);
+                }
+                ShowFileContents(fileName);
+            }
+            catch (IOException ex) {
+                Console.WriteLine("  Ошибка ввода-вывода: " + ex.Message);
+            }
+            catch (Exception ex) {
+                Console.WriteLine("  Ошибка: " + ex.Message);
+            }
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+        static int FindMinPosition(string fileName) {
+            int minPosition = 0;
+            int minValue = int.MaxValue;
+            using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open))) {
+                int currentPosition = 0;
+                while (reader.BaseStream.Position < reader.BaseStream.Length) {
+                    int number = reader.ReadInt32();
+                    if (number < minValue) {
+                        minValue = number;
+                        minPosition = currentPosition;
+                    }
+                    currentPosition += sizeof(int);
+                }
+            }
+            return minPosition;
+        }
+        static void ShowFileContents(string fileName) {
+            using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open))) {
+                Console.Write("  Замена минимального элемента на \"0\": ");
+                while (reader.BaseStream.Position < reader.BaseStream.Length) {
+                    int number = reader.ReadInt32();
+                    Console.Write(number + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
