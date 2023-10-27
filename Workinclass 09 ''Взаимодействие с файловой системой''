@@ -1,0 +1,139 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ReadWriteFile {
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tВЗАИМОДЕЙСТВИЕ С ФАЙЛОВОЙ СИСТЕМОЙ");
+
+            Console.WriteLine("\n\t\tЗадание \"Чтение и запись в файл\"\n");
+            string filename = "Day17.txt";
+            bool fileExists = File.Exists(filename);
+            bool exit = false;
+            while (!exit) {
+                Console.WriteLine("  Меню:");
+                Console.WriteLine("  1. Создать новый файл");
+                Console.WriteLine("  2. Открыть и прочесть файл");
+                Console.WriteLine("  3. Выйти");
+                Console.Write("  Выберите пункт меню: ");
+                string choice = Console.ReadLine();
+                try {
+                    switch (choice) {
+                        case "1":
+                            if (fileExists)
+                                Console.WriteLine("  Файл уже существует");
+                            else {
+                                CreateFile(filename);
+                                Console.WriteLine("  Файл создан");
+                                fileExists = true;
+                            }
+                            break;
+                        case "2":
+                            if (fileExists)
+                                ReadFile(filename);
+                            else
+                                Console.WriteLine("  Файл не существует!");
+                            break;
+                        case "3":
+                            exit = true;
+                            break;
+                        default:
+                            Console.WriteLine("  Некорректный ввод");
+                            break;
+                    }
+                }
+                catch (IOException ex) {
+                    Console.WriteLine("  Ошибка ввода-вывода: " + ex.Message);
+                }
+                catch (Exception ex) {
+                    Console.WriteLine("  Ошибка: " + ex.Message);
+                }
+                Console.WriteLine();
+            }
+        }
+        static void CreateFile(string filename) {
+            using (StreamWriter writer = new StreamWriter(filename)) {
+                writer.WriteLine("Иванов Иван Иванович, 01.01.2000");
+                double[,] doubleArray = new double[,] {
+                { 1.5, 2.5, 3.5 },
+                { 4.5, 5.5, 6.5 },
+                { 7.5, 8.5, 9.5 }
+                };
+                int rows = doubleArray.GetLength(0);
+                int columns = doubleArray.GetLength(1);
+                writer.WriteLine($"{rows} {columns}");
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < columns; j++)
+                        writer.Write(doubleArray[i, j] + " ");
+                    writer.WriteLine();
+                }
+                int[,] intArray = new int[,] {
+                { 1, 2, 3 },
+                { 4, 5, 6 },
+                { 7, 8, 9 }
+                };
+                rows = intArray.GetLength(0);
+                columns = intArray.GetLength(1);
+                writer.WriteLine($"{rows} {columns}");
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < columns; j++)
+                        writer.Write(intArray[i, j] + " ");
+                }
+                writer.WriteLine();
+                writer.WriteLine(DateTime.Now.ToString("dd.MM.yyyy"));
+            }
+        }
+        static void ReadFile(string filename) {
+            using (StreamReader reader = new StreamReader(filename)) {
+                string data = reader.ReadToEnd();
+                string[] lines = data.Split('\n');
+                string[] personData = lines[0].Split(',');
+                string fullName = personData[0].Trim();
+                string birthdate = personData[1].Trim();
+                string[] decimalArraySize = lines[1].Split(' ');
+                int decimalRows = int.Parse(decimalArraySize[0]);
+                int decimalCols = int.Parse(decimalArraySize[1]);
+                double[,] decimalArray = new double[decimalRows, decimalCols];
+                for (int i = 0; i < decimalRows; i++) {
+                    string line = lines[2 + i];
+                    string[] values = line.Split(' ');
+                    for (int j = 0; j < decimalCols; j++)
+                        decimalArray[i, j] = double.Parse(values[j]);
+                }
+                string[] integerArraySize = lines[2 + decimalRows].Split(' ');
+                int integerRows = int.Parse(integerArraySize[0]);
+                int integerCols = int.Parse(integerArraySize[1]);
+                int[,] integerArray = new int[integerRows, integerCols];
+                string integerLine = lines[3 + decimalRows];
+                string[] integerValues = integerLine.Split(' ');
+                for (int i = 0; i < integerRows; i++) {
+                    for (int j = 0; j < integerCols; j++)
+                        integerArray[i, j] = int.Parse(integerValues[i * integerCols + j]);
+                }
+                string currentDate = lines[3 + decimalRows + 1].Trim();
+                Console.WriteLine("  Имя: " + fullName);
+                Console.WriteLine("  Дата рождения: " + birthdate);
+                Console.WriteLine("  Двумерный массив дробных чисел:");
+                PrintArray(decimalArray);
+                Console.WriteLine("  Двумерный массив целых чисел:");
+                PrintArray(integerArray);
+                Console.WriteLine("  Текущая дата: " + currentDate);
+            }
+        }
+        static void PrintArray<T>(T[,] array) {
+            int rows = array.GetLength(0);
+            int cols = array.GetLength(1);
+            for (int i = 0; i < rows; i++) {
+                Console.Write("  ");
+                for (int j = 0; j < cols; j++)
+                    Console.Write(array[i, j] + " ");
+                Console.WriteLine();
+            }
+        }
+    }
+}
