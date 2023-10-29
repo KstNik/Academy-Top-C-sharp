@@ -1,0 +1,194 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Dictionaries {
+    class Dictionary {
+        public string Name { get; set; }
+        public Dictionary<string, List<string>> Words { get; set; }
+        public Dictionary(string name) {
+            Name = name;
+            Words = new Dictionary<string, List<string>>();
+        }
+        public void AddWord(string word, List<string> translations) {
+            try {
+                Words.Add(word, translations);
+                Console.WriteLine("  Слово и перевод(ы) успешно добавлены!");
+            }
+            catch {
+                Console.WriteLine("  Словарь уже содержит слово " + word +", выберите пункт 2!");
+            }
+        }
+        public void RemoveWord(string word) { Words.Remove(word); }
+        public void ReplaceWord(string word, List<string> translations) { Words[word] = translations; }
+        public List<string> SearchWord(string word) {
+            if (Words.ContainsKey(word))
+                 return Words[word];
+            return null;
+        }
+        public void ExportToFile(string fileName) {
+            using (StreamWriter writer = File.AppendText(fileName)) {
+                foreach (var word in Words) {
+                    writer.WriteLine(word.Key);
+                    foreach (var translation in word.Value)
+                        writer.WriteLine("\t" + translation);
+                }
+            }
+        }
+        public void ImportFromFile(string fileName) {
+            string line;
+            string currentWord = "";
+            List<string> currentTranslations = new List<string>();
+            using (StreamReader reader = new StreamReader(fileName)) {
+                while ((line = reader.ReadLine()) != null) {
+                    if (line.StartsWith("\t"))
+                        currentTranslations.Add(line.TrimStart('\t'));
+                    else{
+                        if (!string.IsNullOrEmpty(currentWord)) { 
+                            Words[currentWord] = currentTranslations;
+                            currentTranslations = new List<string>();
+                        }
+                        currentWord = line;
+                    }
+                }
+                if (!string.IsNullOrEmpty(currentWord))
+                    Words[currentWord] = currentTranslations;
+            }
+        }
+    }
+    class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\t\tЭКЗАМЕНАЦИОННАЯ РАБОТА");
+
+            Console.WriteLine("\n\t\tЗадание \"Словари\"\n");
+            List<Dictionary> dictionaries = new List<Dictionary>();
+            while (true) {
+                Console.WriteLine("  Основное меню:");
+                Console.WriteLine("  1. Создать словарь");
+                Console.WriteLine("  2. Выбрать словарь для работы");
+                Console.WriteLine("  3. Выйти из программы");
+                Console.Write("  Выберите пункт меню: ");
+                string choice = Console.ReadLine();
+                if (choice == "1") {
+                    Console.Write("  Введите имя словаря: ");
+                    string dictionaryName = Console.ReadLine();
+                    Dictionary dictionary = new Dictionary(dictionaryName);
+                    dictionaries.Add(dictionary);
+                    Console.WriteLine("  Словарь успешно создан!");
+                }
+                else if (choice == "2") {
+                    if (dictionaries.Count == 0) {
+                        Console.WriteLine("  Нет доступных словарей. Сначала создайте словарь!");
+                        continue;
+                    }
+                    Console.WriteLine("  Доступные словари:");
+                    for (int i = 0; i < dictionaries.Count; i++)
+                        Console.WriteLine($"  {i + 1}. {dictionaries[i].Name}");
+                    Console.Write("  Выберите словарь: ");
+                    int dictIndex = int.Parse(Console.ReadLine()) - 1;
+                    if (dictIndex < 0 || dictIndex >= dictionaries.Count) {
+                        Console.WriteLine("  Некорректный выбор словаря!");
+                        continue;
+                    }
+                    Console.WriteLine($"  Вы выбрали словарь: {dictionaries[dictIndex].Name}");
+                    while (true) {
+                        Console.WriteLine("  Меню:");
+                        Console.WriteLine("  1. Добавить слово и перевод(ы)");
+                        Console.WriteLine("  2. Заменить перевод(ы) слова");
+                        Console.WriteLine("  3. Удалить слово и перевод(ы)");
+                        Console.WriteLine("  4. Искать перевод");
+                        Console.WriteLine("  5. Экспортировать словарь в файл");
+                        Console.WriteLine("  6. Импортировать словарь из файла");
+                        Console.WriteLine("  7. Вернуться в основное меню");
+                        Console.Write("  Выберите пункт меню: ");
+                        string subChoice = Console.ReadLine();
+                        if (subChoice == "1") {
+                            Console.Write("  Введите слово: ");
+                            string word = Console.ReadLine();
+                            Console.Write("  Введите переводы, разделяя их только \n    запятыми (без пробелов!): ");
+                            string translationsInput = Console.ReadLine();
+                            List<string> translations = new List<string>(translationsInput.Split(','));
+                            dictionaries[dictIndex].AddWord(word, translations);
+                        }
+                        else if (subChoice == "2") {
+                            Console.Write("  Введите слово, перевод(ы) которого нужно изменить: ");
+                            string oldWord = Console.ReadLine();
+                            List<string> oldTranslations = dictionaries[dictIndex].SearchWord(oldWord);
+                            if (oldTranslations != null) {
+                                Console.Write("  Введите новые переводы (разделяя их запятыми): ");
+                                string translationsInput = Console.ReadLine();
+                                List<string> translations = new List<string>(translationsInput.Split(','));
+                                dictionaries[dictIndex].ReplaceWord(oldWord, translations);
+                                Console.WriteLine("  Перевод(ы) слова успешно заменены!");
+                            }
+                            else
+                                Console.WriteLine($"  Слово {oldWord} не найдено в словаре!");
+                        }
+                        else if (subChoice == "3") {
+                            Console.Write("  Введите слово, которое нужно удалить: ");
+                            string word = Console.ReadLine();
+                            dictionaries[dictIndex].RemoveWord(word);
+                            Console.WriteLine("  Словарь больше не содержит слова " + word + " и его перевод(ов)!");
+                        }
+                        else if (subChoice == "4") {
+                            Console.Write("  Введите слово для поиска: ");
+                            string searchWord = Console.ReadLine();
+                            List<string> translations = dictionaries[dictIndex].SearchWord(searchWord);
+                            if (translations != null) {
+                                Console.WriteLine($"  Перевод(ы) слова {searchWord}:");
+                                foreach (var translation in translations)
+                                    Console.WriteLine("    " + translation);
+                            }
+                            else
+                                Console.WriteLine($"  Слово {searchWord} не найдено в словаре!");
+                        }
+                        else if (subChoice == "5") {
+                            try {
+                                Console.Write("  Введите имя файла для экспорта: ");
+                                string fileNameExport = Console.ReadLine();
+                                dictionaries[dictIndex].ExportToFile(fileNameExport);
+                                Console.WriteLine("  Словарь успешно экспортирован в файл!");
+                            }
+                            catch (IOException ex) {
+                                Console.WriteLine("  Ошибка ввода-вывода: " + ex.Message);
+                            }
+                            catch (Exception ex) {
+                                Console.WriteLine("  Ошибка: " + ex.Message);
+                            }
+                        }
+                        else if (subChoice == "6") {
+                            try {
+                                Console.Write("  Введите имя файла из которого импортируется словарь: ");
+                                string fileNameImport = Console.ReadLine();
+                                dictionaries[dictIndex].ImportFromFile(fileNameImport);
+                                Console.WriteLine("  Словарь успешно импортирован из файла!");
+                            }
+                            catch (IOException ex) {
+                                Console.WriteLine("  Ошибка ввода-вывода: " + ex.Message);
+                            }
+                            catch (Exception ex) {
+                                Console.WriteLine("  Ошибка: " + ex.Message);
+                            }
+                        }
+                        else if (subChoice == "7") {
+                            break;
+                        }
+                        else {
+                            Console.WriteLine("  Некорректный выбор пункта меню!");
+                        }
+                    }
+                }
+                else if (choice == "3") {
+                    break;
+                }
+                else {
+                    Console.WriteLine("  Некорректный выбор пункта меню!");
+                }
+            }
+        }
+    }
+}
