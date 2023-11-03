@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+
+namespace XML_file {
+    internal class Program {
+        static void Main(string[] args) {
+
+            Console.WriteLine("\n\tЗАПИСЬ И ЧТЕНИЕ XML-ФАЙЛА");
+
+            Console.WriteLine("\n\tЗадание \"Заказы товаров\"\n");
+            try {
+                using (XmlTextWriter writer = new XmlTextWriter("Orders.xml", null)) {
+                    writer.Formatting = Formatting.Indented;
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("Orders");
+                    WriteOrder(writer, "Заказ 1", new string[] { "товар 1", "товар 2", "товар 3" });
+                    WriteOrder(writer, "Заказ 2", new string[] { "товар 4", "товар 5" });
+                    WriteOrder(writer, "Заказ 3", new string[] { "товар 6" });
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                }
+                Console.WriteLine("  Заказы сохранены в файле Orders.xml");
+                Console.WriteLine("  Чтение файла c помощью классов:");
+                Console.WriteLine("  1. XmlDocument:");
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load("Orders.xml");
+                XmlNode ordersNode = xmlDocument.DocumentElement;
+                foreach (XmlNode orderNode in ordersNode.ChildNodes) {
+                    string orderId = orderNode.Attributes["Id"].Value;
+                    Console.Write("       " + orderId + ": ");
+                    foreach (XmlNode productNode in orderNode.ChildNodes) {
+                        string product = productNode.InnerText;
+                        Console.Write(product + "; ");
+                    }
+                    Console.WriteLine();
+                }
+                Console.Write("  2. XmlTextReader:");
+                using (XmlTextReader reader = new XmlTextReader("Orders.xml")) {
+                    while (reader.Read()) {
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "Order") {
+                            Console.WriteLine();
+                            Console.Write("       " + reader.GetAttribute("Id") + ": ");
+                        }
+                        else if (reader.NodeType == XmlNodeType.Element && reader.Name == "Product") {
+                            reader.Read();
+                            Console.Write(reader.Value + "; ");
+                        }
+                    }
+                }
+            }
+            catch (IOException ex) {
+                Console.WriteLine("  Ошибка ввода-вывода: " + ex.Message);
+            }
+            catch (Exception ex) {
+                Console.WriteLine("  Ошибка: " + ex.Message);
+            }
+            Console.Write("\n  Для выхода нажмите любую клавишу ");
+            Console.ReadKey();
+        }
+        static void WriteOrder(XmlTextWriter writer, string orderId, string[] products) {
+            writer.WriteStartElement("Order");
+            writer.WriteAttributeString("Id", orderId);
+            foreach (string product in products) {
+                writer.WriteStartElement("Product");
+                writer.WriteString(product);
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+        }
+    }
+}
