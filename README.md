@@ -212,7 +212,8 @@ Bjarne Stroustrup
 
 ### Тема: "Основные элементы управления: Label, Button, MonthCalendar, DateTimePicker"
 
-Задание 1 Создание непрямоугольной формы Windows. В этом упражнении вы создадите треугольную форму Windows.      
+Задание 1 Создание непрямоугольной формы Windows. В этом упражнении вы создадите треугольную форму Windows.
+
 • Откройте Visual Studio и создайте новый проект Windows Forms;      
 • В окне Properties задайте свойству FormBorderStyle значение None, а свойству BackColor значение Red;      
 • Перетащите кнопку из Toolbox в левый верхний угол формы. Задайте свойству Text кнопки значение Close Form;      
