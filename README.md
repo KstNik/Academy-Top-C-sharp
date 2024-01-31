@@ -395,6 +395,15 @@ Application. Run (now nForm());
 5. Test 05 "Сборщик мусора"
 6. Test 06 "Контрольный"
 
+#### WinForms
+
+1. Test 1 "1. Введение в Windows-программирование"    
+2. Test 2 "2. Введение WinForms"
+3. Test 3 "3. Windows Forms. Списки. Типы списков."
+4. Test 4 "4. WinForms Menu, Dialogs"
+5. Test 5 "5. WinForms RichTextBox, TreeView, ListView, GDI"
+6. Test 6 "6. Итоговый тест WinForms"
+
 #### Работа на уроках
 
 ## Workinclass 01
