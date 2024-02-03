@@ -388,7 +388,7 @@ Application. Run (now nForm());
 
 ## Тесты
 
-1. Test 01 "Основы C#"    
+1. Test 01 "Основы C#"
 2. Test 02 "Перегрузка операторов, обработка исключений"
 3. Test 03 "Интерфейсы"
 4. Test 04 "Делегаты"
@@ -397,7 +397,7 @@ Application. Run (now nForm());
 
 #### WinForms
 
-1. Test 1 "1. Введение в Windows-программирование"    
+1. Test 1 "1. Введение в Windows-программирование"
 2. Test 2 "2. Введение WinForms"
 3. Test 3 "3. Windows Forms. Списки. Типы списков."
 4. Test 4 "4. WinForms Menu, Dialogs"
